@@ -1,0 +1,812 @@
+
+
+# 104. Maximum Depth of Binary Tree (Easy)
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution(object):    
+    def maxDepth(self, root):
+        """
+        :type root: TreeNode
+        :rtype: int
+        """
+        if not root:
+            return 0
+        return 1 + max(self.maxDepth(root.left), self.maxDepth(root.right))
+
+
+# 110. 平衡二叉树
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution(object):
+    
+    def maxDepth(self, root):
+        if not root:
+            return 0
+        return 1 + max(self.maxDepth(root.left), self.maxDepth(root.right))
+    
+    def isBalanced(self, root):
+        
+        """
+        :type root: TreeNode
+        :rtype: bool
+        """
+        
+        if not root:
+            return True
+        
+        return abs(self.maxDepth(root.left) - self.maxDepth(root.right)) <= 1 and \
+    self.isBalanced(root.left) and self.isBalanced(root.right)
+    
+    
+# 543. 二叉树的直径
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution(object):  
+    maxDepth = 0  
+    def diameterOfBinaryTree(self, root):
+        def F(root):
+            if not root:
+                return 0
+            left = F(root.left)
+            right = F(root.right)
+            self.maxDepth = max(self.maxDepth, left + right)
+            return 1 + max(left, right)
+
+            
+        
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution(object):
+    def invertTree(self, root):
+        """
+        :type root: TreeNode
+        :rtype: TreeNode
+        """
+        
+        def F(root):
+            if not root:
+                return None
+            t = root.left
+            root.left = F(root.right)
+            root.right = F(t)
+            return root
+        return F(root)
+
+
+
+# Definition for a binary tree node.
+class TreeNode(object):
+    def __init__(self, x):
+        self.val = x
+        self.left = None
+        self.right = None
+
+class Solution(object):
+        
+    def mergeTrees(self, t1, t2):
+        """
+        :type t1: TreeNode
+        :type t2: TreeNode
+        :rtype: TreeNode
+        """      
+        
+        if not t1 and not t2:
+            return None
+        if t1 and not t2:
+            return TreeNode(t1.val)
+        if not t1 and t2:
+            return TreeNode(t2.val)
+        
+        root = TreeNode(t1.val + t2.val)
+        root.left = self.mergeTrees(t1.left, t2.left)
+        root.left = self.mergeTrees(t1.right, t2.right)
+        return root
+  
+# 112. 路径总和 
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+
+class Solution(object):
+    def hasPathSum(self, root, sum):
+        """
+        :type root: TreeNode
+        :type sum: int
+        :rtype: bool
+        """
+        
+        def F(root, s):
+            if not root:
+                return False
+            if not root.left and not root.right and root.val == s:
+                return True
+            return F(root.left, s - root.val) or F(root.right, s - root.val)
+        return F(root, sum)
+
+
+# 437. 路径总和 III
+class Solution(object): 
+    count = 0   
+    def pathSum(self, root, sum):
+        """
+        :type root: TreeNode
+        :type sum: int
+        :rtype: int
+        """
+        
+        def F(root, s):
+            if not root:
+                return
+            if root.val == s:
+                self.count += 1
+            F(root.left, s - root.val) or F(root.right, s - root.val)
+        
+        def traverse(root):
+            if not root:
+                return 
+            F(root, sum)
+            traverse(root.left)
+            traverse(root.right)
+        
+        traverse(root)
+        return self.count
+
+
+# 572. 另一个树的子树
+class Solution(object):    
+    def isSameTree(self, s, t):
+        if (not s and t) or (s and not t):
+            return False
+        if not s and not t:
+            return True 
+        return s.val == t.val and self.isSameTree(s.left, t.left) and self.isSameTree(s.right, t.right)
+    
+    def isSubtree(self, s, t):
+        if (not s and t) or (s and not t):
+            return False
+        if self.isSameTree(s, t):
+            return True
+        return self.isSubtree(s.left, t) or self.isSubtree(s.right, t)
+        
+        
+# 101. 对称二叉树  
+class Solution(object):
+    def isSymmetric(self, root):
+        def F(a, b):
+            if (not a and b) or (a and not b):
+                return False
+            if not a and not b:
+                return True
+            return a.val == b.val and F(a.left, b.right) and F(a.right, b.left)
+        
+        if not root:
+            return True
+        return F(root.left, root.right)
+
+
+# 10. 最小路径
+class Solution(object):
+    def minDepth(self, root):
+        if not root:
+            return 0
+        
+        left = self.minDepth(root.left)
+        right = self.minDepth(root.right)
+        
+        if left == 0 or right == 0:
+            return 1 + left + right
+        
+        return 1 + min(left, right)
+ 
+    
+# 404. 左叶子之和
+class Solution(object):   
+    s = 0 
+    def sumOfLeftLeaves(self, root):
+        def F(root):
+            if not root:
+                return
+            if root.left and not root.left.left and not root.left.right:
+                self.s += root.left.val
+            F(root.left)
+            F(root.right)
+        F(root)
+        return self.s
+
+
+# 两个二叉树是否完全相同
+def isSame(s, t):
+    if not s and not t:
+        return True
+    if not s or not t:
+        return False
+    return isSame(s.left, t.left) and isSame(s.right, t.right)
+        
+
+# BST中是否包含target
+def f(root, target):
+    if not root:
+        return False
+    if root.val == target:
+        return True
+    # return f(root.left, target) or f(root.right, target)
+    if root.val < target:
+        return f(root.right, target)
+    if root.val > target:
+        return f(root.left, target)
+
+
+# 98. 验证二叉搜索树
+class Solution(object):
+    # def isValidBST(self, root):
+    #     """
+    #     :type root: TreeNode
+    #     :rtype: bool
+    #     """
+    #     def isValid(root, min, max):
+    #         if not root:
+    #             return True
+    #         if min and root.val <= min.val:
+    #             return False
+    #         if max and root.val >= max.val:
+    #             return False
+    #         return isValid(root.left, min, root) and isValid(root.right, root, max)
+    #     return isValid(root, None, None)
+    
+    pre = float('-inf')
+    
+    def isValidBST(self, root):
+        if not root:
+            return True
+        if not self.isValidBST(root.left):
+            return False
+        
+        if root.val <= self.pre:
+            return False
+        self.pre = root.val
+        
+        return self.isValidBST(root.right)
+    
+
+#  687. 最长同值路径       
+class Solution(object):
+    max_path = float('-inf')
+    def longestUnivaluePath(self, root):
+        def F(root):
+            if not root:
+                return 0
+            left = F(root.left)
+            right = F(root.right)
+            left_path = 1 + left if root.left and root.left.val == root.val else 0
+            right_path = 1 + right if root.right and root.right.val == root.val else 0
+            self.max_path = max(self.max_path, left_path + right_path)
+            return max(left_path, right_path)
+        F(root)
+        return self.max_path
+    
+    
+# 337. 打家劫舍 III (没加备忘录)
+class Solution(object):    
+    def rob(self, root):
+        if not root: 
+            return 0
+        
+        do = root.val
+        if root.left:
+            do += self.rob(root.left.left) + self.rob(root.left.right)
+        if root.right:
+            do += self.rob(root.right.left) + self.rob(root.right.right)
+        
+        not_do = self.rob(root.left) + self.rob(root.right)
+        
+        return max(do, not_do)
+
+
+# 671. 二叉树中第二小的节点
+class Solution(object):
+    def findSecondMinimumValue(self, root):
+        """
+        :type root: TreeNode
+        :rtype: int
+        """     
+        if not root:
+            return -1
+        if not root.left and not root.right:
+            return -1
+        
+        left = root.left.val
+        right = root.right.val
+        
+        if left == root.val:
+            left = self.findSecondMinimumValue(root.left)
+        if right == root.val:
+            right = self.findSecondMinimumValue(root.right)
+        
+        if left != -1 and right != -1:
+            return min(left, right)
+        
+        if left == -1:
+            return right
+        
+        if right == -1:
+            return left
+        
+
+# 637. 二叉树的层平均值
+class Solution(object):
+    def averageOfLevels(self, root):
+        """
+        :type root: TreeNode
+        :rtype: List[float]
+        """
+        
+        cur, res = [root], 0
+        while cur:
+            nxt, res = [], sum(n.val for n in cur) / len(cur)
+            for node in cur:
+                if node.left: nxt.append(node.left)
+                if node.right: nxt.append(node.right)
+            cur = nxt
+        return res
+        
+        
+        # ret = []
+        # layer_nodes = [root]
+        # while layer_nodes:
+        #     tmp_layer_nodes = []
+        #     ret.append(sum([n.val for n in layer_nodes]) / len(layer_nodes))
+        #     for node in layer_nodes:
+        #         if node.left:
+        #             tmp_layer_nodes.append(node.left)
+        #         if node.right:
+        #             tmp_layer_nodes.append(node.right)
+        #     layer_nodes = tmp_layer_nodes
+        # return ret
+
+        
+# 513. 找树左下角的值       
+class Solution(object):
+    def findBottomLeftValue(self, root):
+        """
+        :type root: TreeNode
+        :rtype: int
+        """
+        
+        if not root: return []
+        cur, res = [root], root.val
+        while cur:
+            nxt, res = [], cur[0].val
+            for node in cur:
+                if node.left: nxt.append(node.left)
+                if node.right: nxt.append(node.right)
+            cur = nxt
+        return res
+
+
+# 669. 修剪二叉搜索树
+class Solution(object):
+    def trimBST(self, root, L, R):
+        """
+        :type root: TreeNode
+        :type L: int
+        :type R: int
+        :rtype: TreeNode
+        """
+        
+        def F(root): 
+            if not root: return None
+            elif root.val < L: return F(root.right)
+            elif root.val > R: return F(root.left)
+            else:
+                root.left = F(root.left)
+                root.right = F(root.right)
+                return root
+        
+        return F(root)
+    
+# 230. 二叉搜索树中第K小的元素
+class Solution(object):
+    idx = 0
+    r = -1
+    def kthSmallest(self, root, k):
+        """
+        :type root: TreeNode
+        :type k: int
+        :rtype: int
+        """
+        
+        def F(root):
+            if not root:
+                return 
+            F(root.left)
+            self.idx += 1
+            if self.idx == k:
+                self.r = root.val
+            F(root.right)
+        
+        
+        F(root)
+        return self.r
+
+
+# 236. 二叉树的最近公共祖先
+class Solution(object):
+    def lowestCommonAncestor(self, root, p, q):
+        """
+        :type root: TreeNode
+        :type p: TreeNode
+        :type q: TreeNode
+        :rtype: TreeNode
+        """
+        
+        if not root or root == p or root == q: return root
+        left = self.lowestCommonAncestor(root.left, p, q)
+        right = self.lowestCommonAncestor(root.right, p, q)
+        
+        if not left and not right: return None
+        if not left: return right
+        if not right: return left
+        return root
+
+# 108. 将有序数组转换为二叉搜索树   
+class Solution(object):
+    def sortedArrayToBST(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: TreeNode
+        """
+        
+        start, end = 0, len(nums) - 1
+        if start > end: return None
+        mid = (start + end) >> 1
+        root = TreeNode(nums[mid])
+        root.left = self.sortedArrayToBST(nums[start:mid])
+        root.right = self.sortedArrayToBST(nums[mid+1:end+1])
+        return root
+
+
+# 109. 有序链表转换二叉搜索树
+class Solution(object):
+    def sortedListToBST(self, head):
+        """
+        :type head: ListNode
+        :rtype: TreeNode
+        """
+        
+        if not head: return None
+        if not head.next: return TreeNode(head.val)
+        pre = self.preMid(head)
+        mid = pre.next
+        pre.next = None
+        root = TreeNode(mid.val)
+        root.left = self.sortedListToBST(head)
+        root.right = self.sortedListToBST(mid.next)
+        return root
+    
+    def preMid(self, head):
+        pre, slow, fast = head, head, head.next
+        while fast and fast.next:
+            pre = slow 
+            slow = slow.next
+            fast = fast.next.next
+        return pre
+
+# 两数之和 IV - 输入 BST      
+class Solution(object):
+    res = False
+    s = set()
+    def findTarget(self, root, k):
+        """
+        :type root: TreeNode
+        :type k: int
+        :rtype: bool
+        """
+        def F(root):
+            if not root: return
+            F(root.left)
+            if k - root.val in self.r:
+                self.r = True
+            else:
+                self.s.add(root.val)
+            F(root.right)
+        F(root)
+        return self.r
+
+# 530. 二叉搜索树的最小绝对差
+class Solution(object):
+    
+    pre = -float('inf')
+    min_val = float('inf')
+    
+    def getMinimumDifference(self, root):
+        """
+        :type root: TreeNode
+        :rtype: int
+        """
+        
+        def F(root):
+            if not root: return 
+            F(root.left)
+            min_val = min(abs(root.val - self.pre), min_val)
+            self.pre = root.val
+            F(root.right)
+        F(root)
+        return self.min_val
+
+
+# 501. 二叉搜索树中的众数
+class Solution:
+    maxcount = 0
+    count = 0
+    pre = None
+    r = []
+    def findMode(self, root):
+        def F(root):
+            if not root: return 
+            F(root.left)
+            
+            if self.pre == root.val:
+                self.count += 1
+            else:
+                self.count = 1
+            
+            if self.count == self.maxcount:
+                self.r.append(root.val)
+            elif self.count > self.maxcount:
+                self.maxcount = self.count
+                self.r = []
+                self.r.append(root.val)
+                
+            
+            self.pre = root.val            
+            F(root.right)
+        F(root)
+        return self.r
+    
+    
+# 208. 实现 Trie (前缀树)
+class Node(object):
+    def __init__(self):
+        self.word = None
+        self.isEnd = False
+        self.next = {}
+        
+class Trie(object):
+    
+    def __init__(self):
+        """
+        Initialize your data structure here.
+        """
+        self.root = Node()
+
+
+    def insert(self, word):
+        """
+        Inserts a word into the trie.
+        :type word: str
+        :rtype: None
+        """
+        p = self.root
+        for char in word:
+            if char not in p.next:
+                p.next[char] = Node()
+            p = p.next[char]
+        p.isEnd = True
+        p.word = word
+
+    def search(self, word):
+        """
+        Returns if the word is in the trie.
+        :type word: str
+        :rtype: bool
+        """
+        p = self.root
+        for char in word:
+            if char in p.next:
+                p = p.next[char]
+            else:
+                return False
+        return p.isEnd
+        
+    def startsWith(self, prefix):
+        """
+        Returns if there is any word in the trie that starts with the given prefix.
+        :type prefix: str
+        :rtype: bool
+        """
+        
+        p = self.root
+        for char in prefix:
+            if char not in p.next:
+                return False
+            p = p.next[char]
+        else:
+            return True
+
+# 677. 键值映射
+class Node(object):
+    def __init__(self):
+        self.next = {}
+        self.val = 0
+        self.isEnd = False
+        
+class MapSum(object):
+    sum = 0
+    def __init__(self):
+        """
+        Initialize your data structure here.
+        """
+        self.root = Node()
+
+    def insert(self, key, val):
+        """
+        :type key: str
+        :type val: int
+        :rtype: None
+        """
+        p = self.root
+        for char in key:
+            if char not in p.next:
+                p.next[char] = Node()
+            p = p.next[char]
+        p.isEnd = True
+        p.val = val
+
+    def sum(self, prefix):
+        """
+        :type prefix: str
+        :rtype: int
+        """
+        p = self.root
+        for char in prefix[:-1]:
+            if char not in p.next:
+                return 0
+            else:
+                p = p.next[char]
+        if p.val != prefix[-1]: return 0
+        
+        root = p
+        self.s = 0
+        def F(root):
+            if root.isEnd: return 0
+            for node in root.next:
+                if node:
+                    self.s += node.val
+                F(node)
+        F(root)
+        return self.s
+        
+class Solution(object):
+    def dailyTemperatures(self, T):
+        """
+        :type T: List[int]
+        :rtype: List[int]
+        """
+        
+        s = []
+        ret = [0 for _ in range(len(T))]
+        for i, t in enumerate(reversed(T)):
+            I = len(T) - 1 - i
+            while s and t >= s[-1][1]:
+                s.pop()
+            ret[I] = (s[-1][0] - I) if s else 0
+            s.append((I, t))
+        return ret
+
+
+class Solution:
+    def nextGreaterElement(self, nums1, nums2):
+        d = {}
+        s = []
+        for n in reversed(nums2):
+            while s and n >= s[-1]:
+                s.pop()
+            bigger = s[-1] if s else -1
+            d[n] = bigger
+            s.append(n)
+        
+        ret = []
+        for n in nums1:
+            ret.append(d[n])
+        return ret            
+    
+
+# 503. 下一个更大元素 II   
+class Solution(object):
+    def nextGreaterElements(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: List[int]
+        """
+        
+        ret = []
+        s = reversed(nums[:-1])
+        for n in reversed(nums):
+            while s and n >= s[-1]:
+                s.pop()
+            ret.insert(0, s[-1] if s else -1)
+        return ret
+            
+        
+# 239. 滑动窗口最大值   
+
+from collections import deque
+
+class Q:
+    def __init__(self, ksize):
+        self.x = deque(maxlen=ksize)  
+    
+    def push(self, n):
+        while self.x and n > self.x[-1]:
+            self.x.pop()
+        self.x.append(n)      
+    
+    def max(self):
+        if self.x: return self.x[0]
+    
+    def popleft(self, n):
+        if self.x and n == self.x[0]: 
+            self.x.popleft()
+        
+        
+class Solution(object):
+    def maxSlidingWindow(self, nums, k):
+        """
+        :type nums: List[int]
+        :type k: int
+        :rtype: List[int]
+        """
+        r = []
+        q = Q(ksize=k)
+        for i, n in enumerate(nums):
+            q.push(n)
+            if i >= k - 1:
+                r.append(q.max())
+                q.popleft(nums[i-k+1])
+        return r
+           
+        
+class Solution(object):
+    def isIsomorphic(self, s, t):
+        """
+        :type s: str
+        :type t: str
+        :rtype: bool
+        """
+        
+        if len(s) != len(t): return False
+        c = {}
+        d = {}
+        for (x,y) in zip(s,t):
+            if x not in d:
+                d[x] = y
+            if y not in c:
+                c[y] = x
+            if x in d and d[x] != y: return False
+            if y in c and c[y] != x: return False   
+        return True
+            
