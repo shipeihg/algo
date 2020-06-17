@@ -116,3 +116,44 @@ class Solution(object):
                     F(x, y)
         return cnt
                     
+
+# 1254. 统计封闭岛屿的数目(题目的意思是找到不与边界相接的陆地)                   
+class Solution(object):
+    def closedIsland(self, grid):
+        """
+        :type grid: List[List[int]]
+        :rtype: int
+        """
+        
+        # 题解
+        # https://leetcode-cn.com/problems/number-of-closed-islands/solution/dian-xing-dao-yu-ti-dfsjie-ti-xi-jie-by-happyfire/
+        
+        
+        # 返回的是一个bool值；若是陆地，则消消乐，"顺便"看下当前坐标所连接的陆地是否和边界有接触
+        def touch(x, y):
+            if not (0 <= x < len(grid) and 0 <= y < len(grid[0])): return True
+            if grid[x][y] == 1: return False
+            
+            # 如果遇到陆地(即0), 先做访问过的标记置1，然后递归
+            grid[x][y] = 1
+            u = touch(x-1, y)
+            b = touch(x+1, y)
+            l = touch(x, y-1)
+            r = touch(x, y+1)
+            return u or b or l or r 
+        
+        
+        cnt = 0
+        for x in range(len(grid)):
+            for y in range(len(grid[0])):
+                if grid[x][y] == 0:
+                    cnt += not touch(x, y)
+        return cnt
+            
+            
+            
+                
+            
+                
+            
+                
