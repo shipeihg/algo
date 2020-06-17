@@ -142,3 +142,75 @@ class Solution(object):
             if cnt < k: lo = mid + 1
             else: hi = mid
         return lo
+
+# 59. 螺旋矩阵II
+class Solution(object):
+    def generateMatrix(self, n):
+        """
+        :type n: int
+        :rtype: List[List[int]]
+        """
+        
+        left, right, up, down = 0, n-1, 0, n-1
+        mat = [[0 for _ in range(n)] for _ in range(n)]
+        a = 0
+        while a < n*n:
+            for i in range(left, right+1, 1): a += 1; mat[up][i] = a
+            up += 1
+            for i in range(up, down+1, 1): a += 1; mat[i][right] = a
+            right -= 1
+            for i in range(right, left-1, -1): a += 1; mat[down][i] = a
+            down -= 1
+            for i in range(down, up-1, -1): a += 1; mat[i][left] = a
+            left += 1
+        return mat
+
+# 54. 螺旋矩阵
+class Solution(object):
+    def spiralOrder(self, matrix):
+        """
+        :type matrix: List[List[int]]
+        :rtype: List[int]
+        """
+        
+        if not matrix: return []
+        if not matrix[0]: [[] for _ in range(len(matrix))]
+        
+        m, n = len(matrix), len(matrix[0])
+        left, right, up, down = 0, n-1, 0, m-1
+        cnt = 0
+        ret = []
+        while cnt < m*n:
+            for i in range(left, right+1, 1): ret.append(matrix[up][i]); cnt +=1
+            up += 1
+            for i in range(up, down+1, 1): ret.append(matrix[i][right]); cnt += 1
+            right -= 1
+            for i in range(right, left-1, -1): ret.append(matrix[down][i]); cnt += 1
+            down -= 1
+            for i in range(down, up-1, -1): ret.append(matrix[i][left]); cnt += 1
+            left += 1
+        return ret
+    
+
+# 560. 和为K的子数组   
+class Solution(object):
+    def subarraySum(self, nums, k):
+        """
+        :type nums: List[int]
+        :type k: int
+        :rtype: int
+        """
+        
+        preSum = {0: 1}; sm = 0; ret = 0
+        for n in nums:
+            sm += n
+            ret += preSum.get(sm-k, 0)
+            preSum[sm] = preSum.get(sm, 0) + 1
+        return ret
+
+            
+                    
+  
+                
+        
+        

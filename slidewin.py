@@ -251,3 +251,33 @@ class Solution(object):
             if zeros <= K:
                 maxLen = max(maxLen, j - i)
         return maxLen
+
+
+# 697. 数组的度
+class Solution(object):
+    def findShortestSubArray(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+        
+        import collections
+        
+        i = j = 0
+        counter = collections.Counter(nums)
+        maxCnt = max(counter.values())
+        
+        arr = nums
+        minLen = float('inf')
+        d = collections.Counter()
+        while j < len(nums):
+            d[arr[j]] += 1
+            j += 1
+            while any(map(lambda x: d[x] == maxCnt, d.keys())):
+                minLen = min(minLen, j - i)
+                d[arr[i]] -= 1
+                i += 1
+        return minLen
+
+            
+        
