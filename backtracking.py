@@ -10,9 +10,23 @@ https://leetcode-cn.com/problems/permutations/solution/hui-su-suan-fa-by-powcai-
 回溯算法套路
 回溯算法一般是用来返回排列组合的结果的，这一点切记！
 
+1.永远记住俩个要素：【路径 + 选择】
+2.若数组里有重复项，记得先排序
+3.若结果中要求不能含有重复项，记得递归中用 if path not in res 来排除，虽然线性复杂度，但是好理解
+4.【最重要的一点】: 递归函数写成 F(path, choices), 相当于每一个函数都维护着一对(path, choices), 因为choices不是全局变量，所以根本不用模板中的撤销选择，但这样做的代价是增加内存，好处是写着方便，不用担心撤销选择，比较无脑
 
 
+def solution():
+    存放最终结果的列表 res = []
+    def backtrack(选择choice, 路径path):
+        if len(path)==目标长度:
+            res.append(path)
+            return
+        for 选择 in choices:
+            backtrack(排除choice后另外新的选择, path+当前选择)
 
+    backtrack(0, [])
+    return res
 """
 
 
@@ -35,6 +49,27 @@ class Solution(object):
         return r
 
 
+# 47. 全排列 II 
+class Solution(object):
+    def permuteUnique(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: List[List[int]]
+        """
+        
+        r = []
+        def F(path, choice):
+            if len(path) == len(nums):
+                r.append(path)
+            for i in range(len(choice)):
+                F(path + [choice[i]], choice[:i] + choice[i+1:])
+        F([], nums)
+        
+        rr = set(map(tuple, r))
+        rr = list(rr)
+        rr = [list(x) for x in rr]
+        return rr
+        
 
 class Solution:
     def subsets(self, nums):
@@ -48,33 +83,80 @@ class Solution:
                     F(start, path + [nums[i]])
         F(0, [])
         return r
+
+# 90. 子集 II
+class Solution(object):
+    def subsetsWithDup(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: List[List[int]]
+        """
+        nums.sort() # 先排序！！！ 因为nums中含有重复项，且要求结果不能有重复的组合
+        ans = []
+        def F(path, start):
+            if path not in ans:
+                ans.append(path)
+                for i in range(start, len(nums)):
+                    F(path + [nums[i]], 1 + i)
+        F([], 0)
+        return ans
     
+#39. 组合总和 (candidates 中的数字可以无限制重复被选取。)
+class Solution(object):
+    def combinationSum(self, candidates, target):
+        """
+        :type candidates: List[int]
+        :type target: int
+        :rtype: List[List[int]]
+        """
+        candidates.sort() # 排序，从小的开始遍历
+        ans = []
+        def F(path, choices, target):
+            if target == 0: ans.append(path)
+            for i in range(len(choices)):
+                if target < choices[i]: break # 提前结束搜寻
+                F(path+[choices[i]], choices[i:], target-choices[i]) # choices[i:]表示将包括i及其以后的数都考虑在内
+        F([], candidates, target)
+        return ans
     
+# 40. 组合总和 II
 class Solution(object):
     def combinationSum2(self, candidates, target):
-        
+        """
+        :type candidates: List[int]
+        :type target: int
+        :rtype: List[List[int]]
+        """
         candidates.sort()
-        
-        if not candidates:
-            return []
-        if min(candidates) > target:
-            return []
-        
-        r = []
-        def F(path, target, nums):
-            if path not in r:
-                if target == 0:
-                    r.append(path)
-                    return 
-                if target <  0:
-                    return
+        ans = []
+        def F(path, choices, target):
+            if path not in ans: # 要求结果不能有重复项; 加上加句话是因为candidates有重复项
+                if target == 0: ans.append(path)
+                for i in range(len(choices)):
+                    if target < choices[i]: return
+                    F(path + [choices[i]], choices[i+1:], target-choices[i]) # 注意区别 choices[i+1:]
+        F([], candidates, target)
+        return ans
+
+
+# 216. 组合总和 III
+class Solution(object):
+    def combinationSum3(self, k, n):
+        """
+        :type k: int
+        :type n: int
+        :rtype: List[List[int]]
+        """
+        ans = []
+        def F(path, choices, target):
+            if target == 0 and len(path) == k: ans.append(path); return
+            if target != 0 and len(path) == k: return
+            if target < 0: return 
                 
-                for i in range(len(nums)):
-                    if nums[i] > target:
-                        return
-                    F(path + [nums[i]], target - nums[i], nums[i+1:])
-        F([], target, candidates)
-        return r
+            for i in range(len(choices)):
+                F(path + [choices[i]], choices[i+1:], target - choices[i])
+        F([], range(1,10), n)
+        return ans
 
 
 class Solution(object):
@@ -85,19 +167,16 @@ class Solution(object):
         :rtype: List[List[int]]
         """
         
-        nums = range(1, n+1)
+        ans = []
+        def F(path, choices):
+            if len(path) == k: 
+                ans.append(path)
+            for i in range(len(choices)):
+                F(path + [choices[i]], choices[i+1:])
+        F([], range(1,n+1))
+        return ans
         
-        r = []
-        def F(path, nums, depth):
-            if depth == k:
-                r.append(path)
-                return
-            for i in range(len(nums)):
-                F(path + [nums[i]], nums[i+1:], 1 + depth)            
-        F([], nums, 0)
-        return r
-    
-    
+# 51. N皇后
 class Solution(object):
     def solveNQueens(self, n):
         r = []
@@ -109,9 +188,9 @@ class Solution(object):
             for col in range(n):
                 if col in path:
                     continue
-                if  path and any(abs(len(path)-i)==abs(col-j) for i,j in enumerate(path)):
+                if  path and any(abs(len(path)-i)==abs(col-j) for i,j in enumerate(path)): 
                     continue
-                F(path + [col])
+                F(path + [col]) # 接下来的选择完全可以通过path来排除
         F([])
         return self.transform(r, n)
         
@@ -123,8 +202,8 @@ class Solution(object):
                 arr[i] = arr[i][:j] + 'Q' + arr[i][j+1:]
             rr.append(arr)
         return rr
-            
         
+# 131. Palindrome Partitioning (Medium)      
 class Solution(object):
     def partition(self, s):
         
@@ -180,19 +259,76 @@ class Solution(object):
             
             i, j = empty[depth]           
             k = (i//3)*3 + j//3
-            for val in rows[i] & cols[j] & blocks[k]: # 层遍历树的当前深度的所有节点
+            for val in rows[i] & cols[j] & blocks[k]: # 层遍历树的当前深度的所有节点；在(i,j)位置下可供选择的数字
                 rows[i].remove(val)
                 cols[j].remove(val)
-                blocks[k].remove(val)
+                blocks[k].remove(val) # 排除val，实际上是为F(1+depth)做选择
                 board[i][j] = str(val)
                 if F(1 + depth):
-                    return True
-                rows[i].add(val)
+                    return True # 这个就厉害了，数独可能有多个解，F返回bool，一旦为True就退出！
+                rows[i].add(val) # 上面做完选择要撤销选择
                 cols[j].add(val)
                 blocks[k].add(val)
             return False
         F()
         
         
-            
+# 17. 电话号码的字母组合
+class Solution(object):
+    def letterCombinations(self, digits):
+        """
+        :type digits: str
+        :rtype: List[str]
+        """
         
+        if not digits: return []
+        lookup = {
+            "2":"abc",
+            "3":"def",
+            "4":"ghi",
+            "5":"jkl",
+            "6":"mno",
+            "7":"pqrs",
+            "8":"tuv",
+            "9":"wxyz"
+        }
+        
+        ans = []
+        def F(i, path): 
+            if i == len(digits):
+                ans.append(path)
+                return
+            for char in lookup[digits[i]]:
+                F(i+1, path + char)
+        F(0,'')
+        return ans
+      
+                
+# 79. 单词搜索            
+class Solution(object):
+    def exist(self, board, word):
+        """
+        :type board: List[List[str]]
+        :type word: str
+        :rtype: bool
+        """
+        if not board or not board[0]: return False
+        m, n = len(board), len(board[0])
+        
+        def F(x,y,index): 
+            if board[x][y] != word[index]: return False
+            if index == len(word)-1: return True
+            tmp = board[x][y]; board[x][y] = '#'
+            b = False
+            for (xx,yy) in [(x-1,y), (x+1,y), (x,y-1), (x,y+1)]:
+                if 0<=xx<m and 0<=yy<n:
+                    b = b or F(xx,yy,1+index)
+            if b: return True
+            else: board[x][y] = tmp; return False
+        
+        for x in range(m):
+            for y in range(n):
+                if F(x,y,0):
+                    return True
+        return False
+            

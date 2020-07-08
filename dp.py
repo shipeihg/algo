@@ -1,3 +1,5 @@
+
+# 70. 爬楼梯
 class Solution(object):
     def climbStairs(self, n):
         if n == 0 or n == 1:
@@ -8,7 +10,7 @@ class Solution(object):
             pre, cur = cur, pre + cur
         return cur
     
-
+# 198. 打家劫舍
 class Solution(object):
     def rob(self, nums):
         
@@ -33,6 +35,17 @@ class Solution(object):
             return cur
         
         return max([F(nums[:-1]), F(nums[1:])])
+    
+# 413. 等差数列划分
+# https://leetcode-cn.com/problems/arithmetic-slices/solution/chang-yong-tao-lu-jie-jue-dong-tai-gui-hua-by-lu-c/
+
+class Solution(object):
+    def numberOfArithmeticSlices(self, A):
+        dp = [0] * len(A)
+        for i in range(2, len(A)):
+            if A[i]-A[i-1] == A[i-1]-A[i-2]:
+                dp[i] = 1 + dp[i-1]
+        return sum(dp)
 
 
 # Definition for a binary tree node.
