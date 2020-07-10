@@ -331,4 +331,61 @@ class Solution(object):
                 if F(x,y,0):
                     return True
         return False
+
+# 91. 解码方法 (这道题超时，思路其实是DP，但是我没想出来)
+class Solution(object):
+    def numDecodings(self, s):
+        """
+        :type s: str
+        :rtype: int
+        """
+        if not s or s == '0': return 0
+        
+        L = len(s); self.cnt=0
+        def F(length, s):
+            if length == L: self.cnt += 1
+            i=0
+            while i < len(s):
+                if int(s[:i+1]) > 26: continue # 超过26不能解码
+                if i < len(s)-1 and s[i+1] == '0': continue # 当前字符的下一个字符不可以是0
+                if s[i] == '0': continue # 当前字符不能是0，否则会变成 03，他就不是一个数了
+                F(length + 1 + i, s[i+1:])
+                i += 1
+        F(0, s)
+        return self.cnt
+
+
+# 494. 目标和 (超出时间限制， 正确思路应该是DP)
+class Solution(object):
+    def findTargetSumWays(self, nums, S):
+        """
+        :type nums: List[int]
+        :type S: int
+        :rtype: int
+        """
+        # 回溯1
+        self.cnt = 0
+        def F(sum, i):
+            if i == len(nums):
+                if sum == S:
+                    self.cnt += 1
+                return # 一定要在 i==len(nums) 时就停止 --> return
+            F(sum + nums[i], 1+i)
+            F(sum - nums[i], 1+i)
+        F(0, 0)
+        return self.cnt
+        
+        # 回溯2
+        def G(path, i):
+            if len(path) == len(nums):
+                if sum(path) == S:
+                    self.cnt += 1
+                return 
+            G(path + [num[i]], i+1)
+            G(path + [-nums[i]],i+1)
+        G([], 0)
+        retur self.cnt
+    
+            
+
             

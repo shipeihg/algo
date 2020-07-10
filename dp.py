@@ -1,3 +1,9 @@
+"""
+背包问题的总结
+https://leetcode-cn.com/problems/combination-sum-iv/solution/xi-wang-yong-yi-chong-gui-lu-gao-ding-bei-bao-wen-/
+"""
+
+
 
 # 70. 爬楼梯
 class Solution(object):
@@ -287,110 +293,84 @@ class Solution(object):
                     return 0
             
             return F(x + nums[start], start+1) + F(x - nums[start], start + 1)
+
+# # 518. 零钱兑换 II      
+# class Solution(object):
+#     def change(self, amount, coins):
+#         """
+#         :type amount: int
+#         :type coins: List[int]
+#         :rtype: int
+#         """
         
+#         coins.insert(0, 0)
+#         A = coins
+#         memo = {}
+        
+#         def F(i, j):
+            
+#             if memo.get((i,j)):
+#                 return memo[(i,j)]
+            
+#             if i == j == 0:
+#                 x = 1
+#             if i == 0 and j > 0:
+#                 x = 0
+#             if i == 1 and j % A[1] == 0:
+#                 x = 1
+#             if i == 1 and j % A[i] != 0:
+#                 x = 0
+#             if i > 1 and j < A[i]:
+#                 x = F(i-1, j)
+#             if i > 1 and j >= A[i]:
+#                 x = F(i-1, j) + F(i, j - A[i])
+            
+#             memo[(i,j)] = x
+#             return x
+#         return F(len(A)-1, amount)
+
+
+
+# # 518. 零钱兑换 II;零钱组合/与顺序无关的组合
+# class Solution(object):
+#     def change(self, amount, coins):
+        
+#         dp = [[0] * (1 + amount) for _ in range(1 + len(coins))]
+#         dp[0][0] = 1
+        
+#         for i in range(1, 1 + amount):
+#             if i % coins[0] == 0:
+#                 dp[i] = 1
+        
+#         for i in range(2, 1 + len(coins)):
+#             for j in range(0, 1 + amount):
+#                 if j < coins[i-1]:
+#                     dp[i][j] = dp[i-1][j]
+#                 else:
+#                     dp[i][j] = dp[i-1][j] + dp[i][j - coins[i-1]]
+#         return dp[-1][-1]
+
+# 518. 零钱兑换 II(完全背包+组合问题；数组中的元素可重复使用，nums放在外循环，target在内循环。且内循环正序)
 class Solution(object):
     def change(self, amount, coins):
         """
         :type amount: int
         :type coins: List[int]
         :rtype: int
+        
+        可以吧dp数组设置为1维
+        把coins物品选择设置为外层循环，一层一层更新dp数组，对每一个dp元素进行累加, 是一种累和操作
         """
-        
-        coins.insert(0, 0)
-        A = coins
-        memo = {}
-        
-        def F(i, j):
-            
-            if memo.get((i,j)):
-                return memo[(i,j)]
-            
-            if i == j == 0:
-                x = 1
-            if i == 0 and j > 0:
-                x = 0
-            if i == 1 and j % A[1] == 0:
-                x = 1
-            if i == 1 and j % A[i] != 0:
-                x = 0
-            if i > 1 and j < A[i]:
-                x = F(i-1, j)
-            if i > 1 and j >= A[i]:
-                x = F(i-1, j) + F(i, j - A[i])
-            
-            memo[(i,j)] = x
-            return x
-        return F(len(A)-1, amount)
+        if amount == 0: return 1
+        if not coins: reuturn 0
+        dp = [0] * (1+amount)
+        dp[0] = 1
+        for coin in coins:
+            for i in range(coin, 1+amount):
+                dp[i] += dp[i-coin]
+        return dp[-1]
 
-# 零钱组合/与顺序无关的组合
-
-class Solution(object):
-    def change(self, amount, coins):
-        
-        dp = [[0] * (1 + amount) for _ in range(1 + len(coins))]
-        dp[0][0] = 1
-        
-        for i in range(1, 1 + amount):
-            if i % coins[0] == 0:
-                dp[i] = 1
-        
-        for i in range(2, 1 + len(coins)):
-            for j in range(0, 1 + amount):
-                if j < coins[i-1]:
-                    dp[i][j] = dp[i-1][j]
-                else:
-                    dp[i][j] = dp[i-1][j] + dp[i][j - coins[i-1]]
-        return dp[-1][-1]
-
-                
-                
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-
-# 零钱最小数量
-
-class Solution(object):
-    def coinChange(self, coins, amount):
-        
-        dp = [1 + amount] * (1 + amount)
-        dp[0] = 0
-        
-        for i in range(1, 1 + amount):
-            for c in coins:
-                if i >= c:
-                    dp[i] = min(dp[i], 1 + dp[i - c])
-
-        if dp[-1] == 1 + amount:
-            return -1
-        else:
-            return dp[-1]
-
-
-# 377. 组合总和 Ⅳ 
+# 377. 组合总和 Ⅳ(完全背包+组合问题；数组中的元素可重复使用，nums放在外循环，target在内循环。且内循环正序)
 class Solution(object):
     def combinationSum4(self, nums, target):
         """
@@ -398,14 +378,31 @@ class Solution(object):
         :type target: int
         :rtype: int
         """
-        
         dp = [0] * (1 + target)
         dp[0] = 1
         
         for i in range(1, len(dp)):
-            for choice in nums:
-                if i >= choice:
-                    dp[i] += dp[i - choice]
+            for num in nums:
+                if i >= num:
+                    dp[i] += dp[i - num]
+        return dp[-1]
+             
+# 322. 零钱兑换 
+class Solution(object):
+    def coinChange(self, coins, amount):
+        """
+        "(完全背包问题，即数组中的元素可重复使用，nums放在外循环，target在内循环。且内循环正序。)"
+        这里并没有采用这一原则！
+        """
+        
+        dp = [1 + amount] * (1 + amount) # 初始化一个不可能的值，若计算结果仍然未变，则说明没有合适的组合
+        dp[0] = 0 
+        
+        for i in range(1, 1 + amount):
+            for c in coins:
+                if i >= c:
+                    dp[i] = min(dp[i], 1 + dp[i - c])
+        if dp[-1] == 1 + amount: return -1
         return dp[-1]
     
 
@@ -430,30 +427,7 @@ class Solution(object):
         return self.r
 
 
-# 是否可以分割 0-1背包问题
-class Solution(object):
-    def canPartition(self, nums):
-        """
-        :type nums: List[int]
-        :rtype: bool
-        """
-        
-        s = sum(nums) % 2
-        if s == 1:
-            return False
-        
-        dp = [[False] * (1 + s) for _ in range(1 + len(nums))]
-        
-        for i in range(1 + len(nums)):
-            dp[i][0] = True
-        
-        for i in range(1, 1 + len(nums)):
-            for j in range(1, 1 + s):
-                if j < nums[i-1]:
-                    dp[i][j] = dp[i-1][j]
-                else:
-                    dp[i][j] = dp[i-1][j] or dp[i-1][j-nums[i-1]]
-        return dp[-1][-1]
+
           
                 
 ## 单词分割(错误解法)
@@ -485,7 +459,33 @@ class Solution:
         return dp[-1]
  
 
-# 数组是否可以分割为两部分使得两部分的和相等 0-1背包问题 
+# 416. 分割等和子集 0-1背包问题 (采用二维数组，正序)
+class Solution(object):
+    def canPartition(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: bool
+        """
+        
+        s = sum(nums) % 2
+        if s == 1:
+            return False
+        
+        dp = [[False] * (1 + s) for _ in range(1 + len(nums))]
+        
+        for i in range(1 + len(nums)):
+            dp[i][0] = True
+        
+        for i in range(1, 1 + len(nums)):
+            for j in range(1, 1 + s):
+                if j < nums[i-1]:
+                    dp[i][j] = dp[i-1][j] # 都是用到了 i-1层
+                else:
+                    dp[i][j] = dp[i-1][j] or dp[i-1][j-nums[i-1]] # 都是用到了 i-1层
+        return dp[-1][-1]
+
+# 416. 分割等和子集: 数组是否可以分割为两部分使得两部分的和相等 0-1背包问题 (采用一维数组，倒叙)
+# 0-1背包问题，nums(物品列表)在外层循环; target在内层循环，为倒叙 
 class Solution(object):
     def canPartition(self, nums):
         s = sum(nums)
@@ -493,15 +493,34 @@ class Solution(object):
             return False
         
         target = s / 2
-        dp = [True] + [False] * target
+        dp = [True] + [False] * target # dp[0]=True; 因为背包容量是0，任何物品都可以满足，不用装
         
         for num in nums:
             for j in range(len(dp), -1, -1):
                 if j >= num:
                     dp[j] = dp[j] or dp[j - num] # (放 or 不放)
         return dp[-1]
+    
+    
+# 474. 一和零 (0-1背包的多为问题，整理思路，3维数组，正序，非最优解)
+class Solution:
+    # https://leetcode-cn.com/problems/ones-and-zeroes/solution/dong-tai-gui-hua-zhuan-huan-wei-0-1-bei-bao-wen-ti/
+    
+    def findMaxForm(self, strs, m, n):
+        import numpy as np
+        l = len(strs)
+        dp = np.zeros((1+l, 1+m, 1+n), dtype=np.int32).tolist()
+        for i in range(1, l + 1):
+            for j in range(m + 1):
+                for k in range(n + 1):
+                    ones = strs[i - 1].count("1")
+                    zeros = strs[i - 1].count("0")
+                    dp[i][j][k] = dp[i - 1][j][k] # 只有我的背包有容量的时候才进行更新，没有容量的时候要此时 dp[i][j][k]=dp[i-1][j][k]
+                    if j >= zeros and k >= ones:  # 遍历到i时，背包有空余容量装入此时的 0s 1s
+                        dp[i][j][k] = max(dp[i - 1][j - zeros][k - ones] + 1, dp[i-1][j][k])
+        return dp[-1][-1][-1]
 
-
+# 474. 一和零 (0-1背包问题；降维后二维数组，倒叙)
 class Solution(object):
     def findMaxForm(self, strs, m, n):
         """
@@ -512,8 +531,8 @@ class Solution(object):
         """
         
         dp = [[0] * (n+1) for _ in range(m+1)]
-        
         for s in strs:
+            
             one = s.count('1')
             zero = s.count('0')
             
@@ -742,6 +761,53 @@ class Solution(object):
                         1 + dp[i-1][j-1]
                     )
         return dp[-1][-1]
+
+
+                
+    
+            
+class Solution(object):
+    def findMaxForm(self, strs, m, n):
+        """
+        :type strs: List[str]
+        :type m: int
+        :type n: int
+        :rtype: int
+        """
+        import numpy as np
+        l = len(strs)
+        dp = np.zeros((1+l, 1+m, 1+n)):
+        for i in range(1, 1+l):
+            for j in range(1+m):
+                for k in range(1+n):
+                    zeros = strs[i-1].count('0')
+                    ones = strs[i-1].count('1')
+                    if j >= zeros and k >= ones:
+                        dp[i][j][k] = max(dp[i-1][j][k], dp[i-1][j-zeros][k-ones])
+        return dp[-1][-1][-1]
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
 
 
 # Definition for a binary tree node.
