@@ -311,9 +311,9 @@ class Solution(object):
         if not b:
             return a
         
-        if a.val <= b.val:
-            a.next = self.mergeTwoLists(a.next, b)
-            return a
+        if a.val <= b.val: 
+            a.next = self.mergeTwoLists(a.next, b) # 指向下一个最小值
+            return a # 谁的值小，谁就作为头儿返回
         else:
             b.next = self.mergeTwoLists(a, b.next)
             return b
@@ -361,6 +361,9 @@ class Solution(object):
     
     https://leetcode-cn.com/problems/remove-nth-node-from-end-of-list/solution/di-gui-qi-shi-hen-rong-yi-by-antandcoffee/
     这个题解的【评论】很好
+    
+    为何可以用递归方法？因为递归分为递和归两个过程，递的过程为从head开始依次询问next节点是倒序的第几个节点，这样一路询问到链表最后一个节点的next时结 束，此时为null，且为倒序的第0个节点，这样在归的过程中可以依次得到每个节点的倒序位置，当倒序位置与待删除的倒数位置相等时，即找到了待删除节点，此时 返回的为待删除节点的next节点，这样就可以在返回链表时跨过待删除节点，达到删除节点的目的。其他时候直接返回当前节点即可。
+    
     """
     
     count = 0
@@ -379,9 +382,9 @@ class Solution(object):
         self.count += 1
         
         if n == self.count:
-            return head.next
+            return head.next # 此时的节点为待删除节点，返回其next节点跨过待删除节点，达到删除节点的目的
         else:
-            return head
+            return head # 其他情况下正常返回本节点
 
 
 # 24. 两两交换链表中的节点
@@ -402,9 +405,8 @@ class Solution(object):
             return head
         
         a, b = head, head.next
-        a.next = self.swapPairs(head.next.next)
+        a.next = self.swapPairs(a.next.next)
         b.next = a
-        
         return b
     
 
@@ -431,7 +433,7 @@ class Solution(object):
             if not head:
                 return 
             F(head.next)
-            self.count += 1
+            self.count += 1 # 运用递归的倒序
             self.sum += head.val * (10 ** (self.count - 1))
         
         self.count, self.sum = 0, 0
@@ -455,11 +457,14 @@ class Solution(object):
 # 回文联表        
 class Solution(object):
     def isPalindrome(self, head):
+        
+        # 令fast指向末端；slow指向中点；
         fast = slow = head
         while fast and fast.next:
             fast =  fast.next.next
             slow = slow.next
         
+        # 反转操作，以a为头结点
         def reverse(a, b): 
             if a == b:
                 return a
@@ -471,14 +476,17 @@ class Solution(object):
             a.next = b
             return last
         
+        # p是反转操作后新的头结点
         p = reverse(head, slow)
         
+        # 若fast不是None，说明链表数字是奇数个
         if fast:
             slow = slow.next
         
         while slow:
             if p.val != slow.val:
                 return False
+            slow = slow.next; p = p.next
         return True
 
 

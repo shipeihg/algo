@@ -58,3 +58,71 @@ class Solution(object):
             for i in range(coin, 1+amount):
                 dp[i] += dp[i-coin]
         return dp[-1]
+
+
+class Solution(object):
+    def wordBreak(self, s, wordDict):
+        """
+        :type s: str
+        :type wordDict: List[str]
+        :rtype: bool
+        """
+        
+        n = len(s)
+        dp = [False] * (1 + n)
+        dp[0] = True
+        for i in range(1, 1 + n):
+            for word in wordDict:
+                if len(word) <= i and s[i - len(word): i]:
+                    dp[i] = dp[i] or dp[i - len(word)]
+        return dp[-1]
+
+
+class Solution(object):
+    def maxProfit(self, prices):
+        """
+        :type prices: List[int]
+        :rtype: int
+        """
+        
+        import numpy as np
+        dp = np.zeros((len(prices, 2))).tolist()
+        dp[0][0] = 0; dp[0][1] = -prices[0]
+        for i in range(0, len(prices)):
+            for j in range(2):
+                dp[i][0] = max(dp[i-1][0], dp[i-1][1] + prices[i])
+                dp[i][1] = max(dp[i-1][1], dp[i-1][0] - prices[i])
+        return dp[-1][0]
+
+
+
+class Solution(object):
+    def maxProfit(self, prices):
+        """
+        :type prices: List[int]
+        :rtype: int
+        """
+        dp_pre_0, dp_i_0, dp_i_1 = 0, -prices[0] # -prices[0]第一天持有，不可能
+        for i in range(1, len(prices)):
+            tmp = dp_i_0
+            dp_i_0 = max(dp_i_0, dp_i_1 + prices[i])
+            dp_i_1 = max(dp_i_1, dp_pe_0 - prices[i])
+            dp_pre_0 = tmp
+        return dp_i_0
+     
+        
+class Solution(object):
+    def maxProfit(self, prices, fee):
+        """
+        :type prices: List[int]
+        :type fee: int
+        :rtype: int
+        """
+        dp_i_0, dp_i_1 = 0, -float('inf')
+        for i in range(len(prices)):
+            tmp = dp_i_0
+            dp_i_0 = max(dp_i_0, dp_i_1 + prices[i])
+            dp_i_1 = max(dp_i_1, tmp - prices[i] - fee)
+        return dp_i_0
+        
+        

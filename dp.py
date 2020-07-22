@@ -369,23 +369,7 @@ class Solution(object):
             for i in range(coin, 1+amount):
                 dp[i] += dp[i-coin]
         return dp[-1]
-
-# 377. 组合总和 Ⅳ(完全背包+组合问题；数组中的元素可重复使用，nums放在外循环，target在内循环。且内循环正序)
-class Solution(object):
-    def combinationSum4(self, nums, target):
-        """
-        :type nums: List[int]
-        :type target: int
-        :rtype: int
-        """
-        dp = [0] * (1 + target)
-        dp[0] = 1
-        
-        for i in range(1, len(dp)):
-            for num in nums:
-                if i >= num:
-                    dp[i] += dp[i - num]
-        return dp[-1]
+      
              
 # 322. 零钱兑换 
 class Solution(object):
@@ -403,6 +387,44 @@ class Solution(object):
                 if i >= c:
                     dp[i] = min(dp[i], 1 + dp[i - c])
         if dp[-1] == 1 + amount: return -1
+        return dp[-1]
+    
+    
+# 377. 组合总和 Ⅳ(如果组合问题需考虑元素之间的顺序，需将target放在外循环，将nums放在内循环。)
+class Solution(object):
+    def combinationSum4(self, nums, target):
+        """
+        :type nums: List[int]
+        :type target: int
+        :rtype: int
+        
+        https://leetcode-cn.com/problems/combination-sum-iv/solution/dong-tai-gui-hua-python-dai-ma-by-liweiwei1419/
+        
+         /**
+        * 这里状态定义就是题目要求的，并不难，状态转移方程要动点脑子，也不难：
+        * 状态转移方程：dp[i]= dp[i - nums[0]] + dp[i - nums[1]] + dp[i - nums[2]] + ... （当 [] 里面的数 >= 0）
+        * 特别注意：dp[0] = 1，表示，如果那个硬币的面值刚刚好等于需要凑出的价值，这个就成为 1 种组合方案
+        * 再举一个具体的例子：nums=[1, 3, 4], target=7;
+        * dp[7] = dp[6] + dp[4] + dp[3]
+        * 即：7 的组合数可以由三部分组成，1 和 dp[6]，3 和 dp[4], 4 和dp[3];
+        *
+        * @param nums
+        * @param target
+        * @return
+        */
+
+        作者：liweiwei1419
+        链接：https://leetcode-cn.com/problems/combination-sum-iv/solution/dong-tai-gui-hua-python-dai-ma-by-liweiwei1419/
+        来源：力扣（LeetCode）
+        著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+        
+        """
+        dp = [0] * (1 + target)
+        dp[0] = 1 
+        for i in range(1, 1+target):
+            for num in nums:
+                if i >= num:
+                    dp[i] += dp[i - num]
         return dp[-1]
     
 
