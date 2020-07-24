@@ -3,8 +3,22 @@
 # https://leetcode-cn.com/problems/minimum-window-substring/solution/hua-dong-chuang-kou-by-powcai-2/
 
 
+"""
+滑窗套路: 一般用于求取一个最长或短的子串
+相当于快指针做开路先锋，慢指针逐渐微调缩小窗口，至到不满足条件, lookup一般是指存储字符个数的字典
 
-# 3. 无重复字符的最长子串
+left = right = 0
+while right < s.size():
+    lookup.add(s[right])
+    right++
+    
+    while (满足包含条件):
+        lookup.remvove(s[left])
+        left++
+"""
+
+
+# 76. 最小覆盖子串.
 class Solution(object):
     def minWindow(self, s, t):
         """
@@ -14,7 +28,6 @@ class Solution(object):
         """ 
                 
         from collections import Counter
-        
         
         t, lookup = Counter(t), Counter()
         i = j = 0

@@ -124,5 +124,62 @@ class Solution(object):
             dp_i_0 = max(dp_i_0, dp_i_1 + prices[i])
             dp_i_1 = max(dp_i_1, tmp - prices[i] - fee)
         return dp_i_0
+
+
+class Solution(object):
+    def findMaxConsecutiveOnes(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
         
+        # self.ma = self.cnt = 0
+        # def countOnes(n):
+        #     if nums[n] == 0:
+        #         self.ma = max(self.ma, self.cnt)
+        #         self.cnt = 0
+        #     if nums[n] == nums[n-1]:
+        #         self.cnt += 1
         
+        cur = ma = 0
+        for n nums:
+            cur = 0 if n==0 else 1+cur
+            ma = max(ma, cur)
+        return ma
+                
+        
+
+class Solution(object):
+    def searchMatrix(self, matrix, target):
+        """
+        :type matrix: List[List[int]]
+        :type target: int
+        :rtype: bool
+        """
+        if not matrix or not matrix[0]: return False
+        m, n = len(matrix), len(matrix[0])
+        row, col = 0, n-1
+        while row < m and col >=0:
+            if matrix[row][col] == target: return True
+            elif matrix[row][col] < target: row += 1
+            else: col -= 1
+        return False
+    
+    
+class Solution(object):
+    def arrayNesting(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+        A = nums
+        ma = 0
+        for i in range(len(nums)):
+            s = set()
+            new_index = A[i]
+            while new_index not in s:
+                s.add(new_index)
+                new_index = A[new_index]
+            ma = max(ma, len(s))
+        return ma
+            

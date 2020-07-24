@@ -7,11 +7,11 @@ class Solution(object):
         :type nums: List[int]
         :rtype: None Do not return anything, modify nums in-place instead.
         """
-        i = j = 0
+        i = j = 0 # 快慢指针
         while j < len(nums):
             if nums[j] != 0:
                 nums[i], nums[j] = nums[j], nums[i]
-                i += 1
+                i += 1 # 慢指针不会再非0处停留，换言之，他只会指向0处
             j += 1
     
 # 485. 最大连续1的个数
