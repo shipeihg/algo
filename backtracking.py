@@ -10,22 +10,22 @@ https://leetcode-cn.com/problems/permutations/solution/hui-su-suan-fa-by-powcai-
 回溯算法套路
 回溯算法一般是用来返回排列组合的结果的，这一点切记！
 
-1.永远记住俩个要素：【路径 + 选择】
+1.永远记住俩个要素：【路径 + 选择】(理解为：当前的路径+剩余的选择)
 2.若数组里有重复项，记得先排序
 3.若结果中要求不能含有重复项，记得递归中用 if path not in res 来排除，虽然线性复杂度，但是好理解
-4.【最重要的一点】: 递归函数写成 F(path, choices), 相当于每一个函数都维护着一对(path, choices), 因为choices不是全局变量，所以根本不用模板中的撤销选择，但这样做的代价是增加内存，好处是写着方便，不用担心撤销选择，比较无脑
+4.【最重要的一点】: 递归函数写成 F(path当前路径, choices剩余的选择), 相当于每一个函数都维护着一对(path, choices), 因为choices不是全局变量，所以根本不用模板中的撤销选择，但这样做的代价是增加内存，好处是写着方便，不用担心撤销选择，比较无脑
 
 
 def solution():
     存放最终结果的列表 res = []
-    def backtrack(选择choice, 路径path):
+    def backtrack(路径path, 选择choice):
         if len(path)==目标长度:
             res.append(path)
             return
         for 选择 in choices:
-            backtrack(排除choice后另外新的选择, path+当前选择)
+            backtrack(path+当前选择, 排除choice后另外新的选择)
 
-    backtrack(0, [])
+    backtrack([], 0)
     return res
 """
 

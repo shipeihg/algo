@@ -108,17 +108,14 @@ class Solution(object):
         :type nums: List[int]
         :rtype: int
         """
-        
-        lo, hi = 1, len(nums) - 1
-        while lo < hi:
-            mid = (lo + hi) >> 1
-            cnt = 0
-            for n in nums:
-                if n <= mid: 
-                    cnt += 1
-            if cnt <= mid: lo = mid + 1
-            else: hi = mid
-        return lo
+
+        i,j = 0, len(nums)-1
+        while i<j:
+            m = (i+j) >> 1
+            cnt = sum(num <= m for num in nums)
+            if cnt <= m: i = m + 1
+            else: j = m
+        return i
 
 
 # 378. 有序矩阵中第K小的元素
@@ -129,19 +126,15 @@ class Solution(object):
         :type k: int
         :rtype: int
         """
-        
-        m, n = len(matrix), len(matrix[0])
-        lo, hi = matrix[0][0], matrix[-1][-1]
-        while lo < hi:
-            mid = (lo + hi) >> 1
-            cnt = 0
-            for i in range(m):
-                for j in range(n):
-                    if matrix[i][j] <= mid:
-                        cnt += 1
-            if cnt < k: lo = mid + 1
-            else: hi = mid
-        return lo
+
+        r, c = len(matrix), len(matrix[0])
+        i, j = matrix[0][0], matrix[-1][-1]
+        while i < j:
+            m = (i + j) >> 1
+            cnt = sum(matrix[x][y] <= m for x in range(r) for y in range(c))
+            if cnt < k: i = m + 1 # 若<=中值的个数cnt小于k,则第k个值肯定在中值的右侧
+            else: j = m
+        return i
 
 # 59. 螺旋矩阵II
 class Solution(object):
@@ -166,6 +159,7 @@ class Solution(object):
         return mat
 
 # 54. 螺旋矩阵
+#https://leetcode-cn.com/problems/spiral-matrix/solution/shou-hui-tu-jie-liang-chong-bian-li-de-ce-lue-kan-/
 class Solution(object):
     def spiralOrder(self, matrix):
         """
@@ -208,8 +202,17 @@ class Solution(object):
             preSum[sm] = preSum.get(sm, 0) + 1
         return ret
 
-            
-                    
+
+# 766. 托普利茨矩阵         
+class Solution(object):
+    def isToeplitzMatrix(self, matrix):
+        """
+        :type matrix: List[List[int]]
+        :rtype: bool
+        """
+
+        m, n = len(matrix), len(matrix[0])
+        return all(matrix[i][j]==matrix[i-1][j-1] for i in range(1,m) for j in range(1,n))
   
                 
         

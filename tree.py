@@ -177,65 +177,68 @@ class Solution(object):
 
 
 # 572. 另一个树的子树
+#https://leetcode-cn.com/problems/subtree-of-another-tree/solution/dui-cheng-mei-pan-duan-zi-shu-vs-pan-duan-xiang-de/
 class Solution(object):    
     def isSameTree(self, s, t):
-        if (not s and t) or (s and not t):
-            return False
-        if not s and not t:
-            return True 
+        if not s and not t: return True
+        if not s or not t: return False
         return s.val == t.val and self.isSameTree(s.left, t.left) and self.isSameTree(s.right, t.right)
     
     def isSubtree(self, s, t):
-        if (not s and t) or (s and not t):
-            return False
-        if self.isSameTree(s, t):
-            return True
-        return self.isSubtree(s.left, t) or self.isSubtree(s.right, t)
+        if not s and not t: return True
+        if not s or not t: return False
+        return self.isSameTree(s, t) or self.isSubtree(s.left, t) or self.isSubtree(s.right, t)
+        
         
         
 # 101. 对称二叉树  
 class Solution(object):
     def isSymmetric(self, root):
-        def F(a, b):
-            if (not a and b) or (a and not b):
-                return False
-            if not a and not b:
-                return True
-            return a.val == b.val and F(a.left, b.right) and F(a.right, b.left)
-        
-        if not root:
-            return True
-        return F(root.left, root.right)
+        """
+        :type root: TreeNode
+        :rtype: bool
+        """
+        if not root: return True
+        return self.mirror(root.left, root.right)
+
+    def mirror(self, s, t):
+        if not s and not t: return True
+        if not s or not t: return False
+        return s.val == t.val and self.mirror(s.left, t.right) and self.mirror(s.right, t.left)
 
 
-# 10. 最小路径
+# 111. 二叉树的最小深度
 class Solution(object):
+    ans = float('inf')
     def minDepth(self, root):
-        if not root:
-            return 0
-        
+        """
+        :type root: TreeNode
+        :rtype: int
+        """
+
+        if not root: return 0
         left = self.minDepth(root.left)
         right = self.minDepth(root.right)
-        
-        if left == 0 or right == 0:
-            return 1 + left + right
-        
+        if not root.left: return 1 + right # root 只有一个子节点
+        if not root.right: return 1 + left
         return 1 + min(left, right)
  
     
 # 404. 左叶子之和
-class Solution(object):   
-    s = 0 
+class Solution(object):
     def sumOfLeftLeaves(self, root):
+        """
+        :type root: TreeNode
+        :rtype: int
+        """
+        self.ans = 0
         def F(root):
-            if not root:
-                return
-            if root.left and not root.left.left and not root.left.right:
-                self.s += root.left.val
+            if not root: return
+            if root.left and not root.left.left and not root.left.right: self.ans += root.left.val
             F(root.left)
             F(root.right)
         F(root)
-        return self.s
+        return self.ans
 
 
 # 两个二叉树是否完全相同
@@ -332,28 +335,15 @@ class Solution(object):
         """
         :type root: TreeNode
         :rtype: int
-        """     
-        if not root:
-            return -1
-        if not root.left and not root.right:
-            return -1
-        
-        left = root.left.val
-        right = root.right.val
-        
-        if left == root.val:
-            left = self.findSecondMinimumValue(root.left)
-        if right == root.val:
-            right = self.findSecondMinimumValue(root.right)
-        
-        if left != -1 and right != -1:
-            return min(left, right)
-        
-        if left == -1:
-            return right
-        
-        if right == -1:
-            return left
+        """
+        if not root: return -1
+        if not root.left and not root.right: return -1
+        left, right = root.left.val, root.right.val
+        if root.left and root.val == root.left.val: left = self.findSecondMinimumValue(root.left)
+        if root.right and root.val == root.right.val: right = self.findSecondMinimumValue(root.right)
+        if left == -1: return right
+        if right == -1: return left
+        return min(left, right)
         
 
 # 637. 二叉树的层平均值
@@ -453,7 +443,7 @@ class Solution(object):
         return self.r
 
 
-# 236. 二叉树的最近公共祖先
+# 236. 二叉树的最近公共祖先(不好理解)
 class Solution(object):
     def lowestCommonAncestor(self, root, p, q):
         """
@@ -472,6 +462,36 @@ class Solution(object):
         if not right: return left
         return root
 
+# 剑指 Offer 68 - I. 二叉搜索树的最近公共祖先
+class Solution(object):
+    def lowestCommonAncestor(self, root, p, q):
+        """
+        :type root: TreeNode
+        :type p: TreeNode
+        :type q: TreeNode
+        :rtype: TreeNode
+        """
+
+        if root == p or root == q: return root
+        if root.val < min(p.val, q.val): return self.lowestCommonAncestor(root.right, p, q)
+        elif root.val > max(p.val, q.val): return self.lowestCommonAncestor(root.left, p, q)
+        else: return root
+
+# 剑指 Offer 07. 重建二叉树
+class Solution(object):
+    def buildTree(self, preorder, inorder):
+        """
+        :type preorder: List[int]
+        :type inorder: List[int]
+        :rtype: TreeNode
+        """
+        if not preorder: return None
+        mid = inorder.index(preorder[0])
+        root = TreeNode(inorder[mid])
+        root.left = self.buildTree(preorder[1:mid+1], inorder[:mid])
+        root.right = self.buildTree(preorder[mid+1:], inorder[mid+1:])
+        return root
+
 # 108. 将有序数组转换为二叉搜索树   
 class Solution(object):
     def sortedArrayToBST(self, nums):
@@ -480,12 +500,12 @@ class Solution(object):
         :rtype: TreeNode
         """
         
-        start, end = 0, len(nums) - 1
-        if start > end: return None
-        mid = (start + end) >> 1
-        root = TreeNode(nums[mid])
-        root.left = self.sortedArrayToBST(nums[start:mid])
-        root.right = self.sortedArrayToBST(nums[mid+1:end+1])
+        i, j = 0, len(nums)-1
+        if i > j: return None
+        m = (i + j) >> 1
+        root = TreeNode(nums[m])
+        root.left = self.sortedArrayToBST(nums[:m])
+        root.right = self.sortedArrayToBST(nums[m+1:])
         return root
 
 
@@ -508,7 +528,7 @@ class Solution(object):
         return root
     
     def preMid(self, head):
-        pre, slow, fast = head, head, head.next
+        pre, slow, fast = head, head, head.next # pre 中点的前一个节点
         while fast and fast.next:
             pre = slow 
             slow = slow.next
@@ -569,18 +589,13 @@ class Solution:
             if not root: return 
             F(root.left)
             
-            if self.pre == root.val:
-                self.count += 1
-            else:
-                self.count = 1
-            
+            if self.pre == root.val: self.count += 1
+            else: self.count = 1
             if self.count == self.maxcount:
                 self.r.append(root.val)
             elif self.count > self.maxcount:
                 self.maxcount = self.count
-                self.r = []
-                self.r.append(root.val)
-                
+                self.r = [root.val]                
             
             self.pre = root.val            
             F(root.right)

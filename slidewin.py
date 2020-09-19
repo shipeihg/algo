@@ -4,17 +4,20 @@
 
 
 """
-滑窗套路: 一般用于求取一个最长或短的子串
-相当于快指针做开路先锋，慢指针逐渐微调缩小窗口，至到不满足条件, lookup一般是指存储字符个数的字典
+滑窗套路: 一般用于求取一个【最长】或【最短】的子串
+相当于快指针做开路先锋，每一次快指针停留处，慢指针逐渐微调缩小窗口，至到不满足条件, lookup一般是指存储字符个数的字典
 
 left = right = 0
 while right < s.size():
     lookup.add(s[right])
     right++
     
-    while (满足包含条件):
+    while (求【最小或等长串】的时候是【所有】满足某个条件; 求【最大串】的时候要【存在】某个字符满足条件):
+        【1】若求【最短】就在内循环
         lookup.remvove(s[left])
         left++
+        
+    【2】若求【最长】就在这里
 """
 
 
@@ -77,7 +80,7 @@ class Solution(object):
 
 # 438. 找到字符串中所有字母异位词
 class Solution(object):
-    def findAnagrams(self, s, p):
+    def findAnagrams(self, s, p): # 输入: 两个字符串对比哦
         """
         :type s: str
         :type p: str
@@ -93,7 +96,7 @@ class Solution(object):
         while j < len(s):
             lookup[s[j]] += 1
             j += 1
-            while j - i >= len(p):
+            while j - i >= len(p): # 这道题和下面一样，都要判断是否大于目标字符串
                 if j - i == len(p) and all(map(lambda x: lookup[x] == t[x], t.keys())):
                     r.append(i)
                 lookup[s[i]] -= 1
@@ -103,7 +106,7 @@ class Solution(object):
 
 # 567. 字符串的排列
 class Solution(object):
-    def checkInclusion(self, s1, s2):
+    def checkInclusion(self, s1, s2): # 输入: 两个字符串对比哦
         """
         :type s1: str
         :type s2: str
@@ -121,7 +124,7 @@ class Solution(object):
         while j < len(s):
             lookup[s[j]] += 1
             j += 1
-            while j - i >= len(s1):
+            while j - i >= len(s1): # 判断是否>=目标串的长度
                 if j - i == len(s1) and all(map(lambda x: lookup[x] == t[x], t.keys())):
                     return True
                 lookup[s[i]] -= 1
@@ -129,7 +132,7 @@ class Solution(object):
         return False
 
 
-
+# 159. 最多有两个不同字符的最长子串
 class Solution(object):
     def lengthOfLongestSubstringTwoDistinct(self, s):        
         i = j = 0
@@ -146,6 +149,7 @@ class Solution(object):
         return maxLen
     
 
+# 30. 串联所有单词的子串
 class Solution(object):
     def findSubstring(self, s, words):
         """
@@ -172,6 +176,7 @@ class Solution(object):
             if Counter(tmp_parts) == counter:
                 r.append(i)
         return r
+    
     
 # 480. 滑动窗口中位数
 class Solution(object):
@@ -218,9 +223,6 @@ class Solution(object):
 #         return maxLen
        
 
-        
-     
-        
         
 # 128. 最长连续序列      
 class Solution(object):

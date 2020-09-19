@@ -134,7 +134,7 @@ class Solution(object):
 
         return max(dp)
     
-
+# 413. Arithmetic Slices (Medium) 数组中等差递增子区间的个数
 class Solution(object):
     def numberOfArithmeticSlices(self, A):
         
@@ -144,7 +144,7 @@ class Solution(object):
                 dp[i] = 1 + dp[i-1]
         return sum(dp)
     
-
+# 91. Decode Ways (Medium) (这里用了回溯算法，其实应该用动态规划复杂度要低，但是前者好理解)
 class Solution(object):
     def numDecodings(self, s):
         """
@@ -166,10 +166,8 @@ class Solution(object):
         F(0, s)
         return self.count
 
-ss = Solution()
-print ss.numDecodings('0')
 
-
+# 91. Decode Ways (Medium)
 class Solution(object):
     def numDecodings(self, s):
         """
@@ -274,17 +272,6 @@ class Solution(object):
         :rtype: int
         """
         
-        # self.r = 0
-        # def F(x, start):
-        #     if start == len(nums):
-        #         if x == S:
-        #             self.r += 1
-        #         return
-        #     F(x+nums[start], start+1)
-        #     F(x-nums[start], start+1)
-        # F(0, 0)
-        # return self.r
-        
         def F(x, start):
             if start == len(nums):
                 if x == S:
@@ -294,61 +281,6 @@ class Solution(object):
             
             return F(x + nums[start], start+1) + F(x - nums[start], start + 1)
 
-# # 518. 零钱兑换 II      
-# class Solution(object):
-#     def change(self, amount, coins):
-#         """
-#         :type amount: int
-#         :type coins: List[int]
-#         :rtype: int
-#         """
-        
-#         coins.insert(0, 0)
-#         A = coins
-#         memo = {}
-        
-#         def F(i, j):
-            
-#             if memo.get((i,j)):
-#                 return memo[(i,j)]
-            
-#             if i == j == 0:
-#                 x = 1
-#             if i == 0 and j > 0:
-#                 x = 0
-#             if i == 1 and j % A[1] == 0:
-#                 x = 1
-#             if i == 1 and j % A[i] != 0:
-#                 x = 0
-#             if i > 1 and j < A[i]:
-#                 x = F(i-1, j)
-#             if i > 1 and j >= A[i]:
-#                 x = F(i-1, j) + F(i, j - A[i])
-            
-#             memo[(i,j)] = x
-#             return x
-#         return F(len(A)-1, amount)
-
-
-
-# # 518. 零钱兑换 II;零钱组合/与顺序无关的组合
-# class Solution(object):
-#     def change(self, amount, coins):
-        
-#         dp = [[0] * (1 + amount) for _ in range(1 + len(coins))]
-#         dp[0][0] = 1
-        
-#         for i in range(1, 1 + amount):
-#             if i % coins[0] == 0:
-#                 dp[i] = 1
-        
-#         for i in range(2, 1 + len(coins)):
-#             for j in range(0, 1 + amount):
-#                 if j < coins[i-1]:
-#                     dp[i][j] = dp[i-1][j]
-#                 else:
-#                     dp[i][j] = dp[i-1][j] + dp[i][j - coins[i-1]]
-#         return dp[-1][-1]
 
 # 518. 零钱兑换 II(完全背包+组合问题；数组中的元素可重复使用，nums放在外循环，target在内循环。且内循环正序)
 class Solution(object):
