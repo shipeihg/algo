@@ -45,6 +45,8 @@ class Solution:
             else:
                 votes -= 1
         return x
+    
+    
 class Solution:
     def majorityElement(self, nums):
         votes = 0
