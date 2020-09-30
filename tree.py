@@ -20,13 +20,6 @@ class Solution(object):
 
 
 # 110. 平衡二叉树
-# Definition for a binary tree node.
-# class TreeNode(object):
-#     def __init__(self, x):
-#         self.val = x
-#         self.left = None
-#         self.right = None
-
 class Solution(object):
     
     def maxDepth(self, root):
@@ -49,13 +42,6 @@ class Solution(object):
     
     
 # 543. 二叉树的直径
-# Definition for a binary tree node.
-# class TreeNode(object):
-#     def __init__(self, x):
-#         self.val = x
-#         self.left = None
-#         self.right = None
-
 class Solution(object):  
     maxDepth = 0  
     def diameterOfBinaryTree(self, root):
@@ -67,15 +53,7 @@ class Solution(object):
             self.maxDepth = max(self.maxDepth, left + right)
             return 1 + max(left, right)
 
-            
-        
-# Definition for a binary tree node.
-# class TreeNode(object):
-#     def __init__(self, x):
-#         self.val = x
-#         self.left = None
-#         self.right = None
-
+# 翻转二叉树         
 class Solution(object):
     def invertTree(self, root):
         """
@@ -92,15 +70,7 @@ class Solution(object):
             return root
         return F(root)
 
-
-
-# Definition for a binary tree node.
-class TreeNode(object):
-    def __init__(self, x):
-        self.val = x
-        self.left = None
-        self.right = None
-
+# 合并二叉树
 class Solution(object):
         
     def mergeTrees(self, t1, t2):
@@ -123,14 +93,6 @@ class Solution(object):
         return root
   
 # 112. 路径总和 
-# Definition for a binary tree node.
-# class TreeNode(object):
-#     def __init__(self, x):
-#         self.val = x
-#         self.left = None
-#         self.right = None
-
-
 class Solution(object):
     def hasPathSum(self, root, sum):
         """
@@ -265,23 +227,7 @@ def f(root, target):
 
 # 98. 验证二叉搜索树
 class Solution(object):
-    # def isValidBST(self, root):
-    #     """
-    #     :type root: TreeNode
-    #     :rtype: bool
-    #     """
-    #     def isValid(root, min, max):
-    #         if not root:
-    #             return True
-    #         if min and root.val <= min.val:
-    #             return False
-    #         if max and root.val >= max.val:
-    #             return False
-    #         return isValid(root.left, min, root) and isValid(root.right, root, max)
-    #     return isValid(root, None, None)
-    
     pre = float('-inf')
-    
     def isValidBST(self, root):
         if not root:
             return True
@@ -362,20 +308,6 @@ class Solution(object):
                 if node.right: nxt.append(node.right)
             cur = nxt
         return res
-        
-        
-        # ret = []
-        # layer_nodes = [root]
-        # while layer_nodes:
-        #     tmp_layer_nodes = []
-        #     ret.append(sum([n.val for n in layer_nodes]) / len(layer_nodes))
-        #     for node in layer_nodes:
-        #         if node.left:
-        #             tmp_layer_nodes.append(node.left)
-        #         if node.right:
-        #             tmp_layer_nodes.append(node.right)
-        #     layer_nodes = tmp_layer_nodes
-        # return ret
 
         
 # 513. 找树左下角的值       
@@ -601,8 +533,79 @@ class Solution:
             F(root.right)
         F(root)
         return self.r
+
+
+# 124. 二叉树中的最大路径和
+class Solution(object):
+    def maxPathSum(self, root):
+        """
+        :type root: TreeNode
+        :rtype: int
+        """
+        
+        self.r = -float('inf')
+        
+        def F(root):
+            if not root: return 0
+            left = max(0, F(root.left))
+            right = max(0, F(root.right))
+            self.r = max(self.r, left + right + root.val)
+            return max(left, right) + root.val
+
+        F(root)
+        return self.r
+
+
+# 124. 通过前序遍历和中序遍历的值恢复二叉树
+class TreeNode(object):
+    def __init__(self, x):
+        self.val = x
+        self.left = None
+        self.right = None
+
+class Solution(object):
+    def buildTree(self, preorder, inorder):
+        """
+        :type preorder: List[int]
+        :type inorder: List[int]
+        :rtype: TreeNode
+        """
+        if not inorder: return None
+        root = TreeNode(preorder[0])
+        mid = inorder.index(preorder[0])
+        root.left = self.buildTree(preorder[:mid+1], inorder[:mid])
+        root.right = self.buildTree(preorder[mid+1:], inorder[mid+1:])
+        return root
     
-    
+# 99 修复错误的BST
+class Solution(object):
+    def recoverTree(self, root):
+        """
+        :type root: TreeNode
+        :rtype: None Do not return anything, modify root in-place instead.
+        """
+        
+        self.pre = TreeNode(float('-inf'))
+        self.first = None
+        self.second = None
+        
+        def F(root):
+            
+            if not root: return 
+            F(root.left)
+            
+            if not self.first and root.val < self.pre.val:
+                self.first = self.pre
+                self.second = root
+            elif self.first and root.val < self.pre.val:
+                self.second = root
+            self.pre = root
+            
+            F(root.right)
+        F(root)
+        self.first.val, self.second.val = self.second.val, self.first.val
+        
+        
 # 208. 实现 Trie (前缀树)
 class Node(object):
     def __init__(self):
@@ -715,57 +718,6 @@ class MapSum(object):
         F(root)
         return self.s
         
-class Solution(object):
-    def dailyTemperatures(self, T):
-        """
-        :type T: List[int]
-        :rtype: List[int]
-        """
-        
-        s = []
-        ret = [0 for _ in range(len(T))]
-        for i, t in enumerate(reversed(T)):
-            I = len(T) - 1 - i
-            while s and t >= s[-1][1]:
-                s.pop()
-            ret[I] = (s[-1][0] - I) if s else 0
-            s.append((I, t))
-        return ret
-
-
-class Solution:
-    def nextGreaterElement(self, nums1, nums2):
-        d = {}
-        s = []
-        for n in reversed(nums2):
-            while s and n >= s[-1]:
-                s.pop()
-            bigger = s[-1] if s else -1
-            d[n] = bigger
-            s.append(n)
-        
-        ret = []
-        for n in nums1:
-            ret.append(d[n])
-        return ret            
-    
-
-# 503. 下一个更大元素 II   
-class Solution(object):
-    def nextGreaterElements(self, nums):
-        """
-        :type nums: List[int]
-        :rtype: List[int]
-        """
-        
-        ret = []
-        s = reversed(nums[:-1])
-        for n in reversed(nums):
-            while s and n >= s[-1]:
-                s.pop()
-            ret.insert(0, s[-1] if s else -1)
-        return ret
-            
         
 # 239. 滑动窗口最大值   
 

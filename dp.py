@@ -54,44 +54,20 @@ class Solution(object):
         return sum(dp)
 
 
-# Definition for a binary tree node.
-# class TreeNode(object):
-#     def __init__(self, x):
-#         self.val = x
-#         self.left = None
-#         self.right = None
-
 class Solution(object):
     
     memo = {}
     
     def rob(self, root):
-        """
-        :type root: TreeNode
-        :rtype: int
-        """
-        
-        if not root:
-            return 0
-        
-        if self.memo.get(root):
-            return self.memo.get(root)
-        
-        # do = (root.val + 
-        #       (self.rob(root.left.left) + self.rob(root.left.right)) if root.left else 0 +
-        #       (self.rob(root.right.left) + self.rob(root.right.right)) if root.right else 0
-        # )
+        if not root: return 0
+        if self.memo.get(root): return self.memo.get(root)
         
         do = root.val
-        if root.left:
-            do += self.rob(root.left.left) + self.rob(root.left.right)
-        if root.right:
-            do += self.rob(root.right.left) + self.rob(root.right.right)
-        
+        if root.left: do += self.rob(root.left.left) + self.rob(root.left.right)
+        if root.right: do += self.rob(root.right.left) + self.rob(root.right.right)
         not_do = self.rob(root.left) + self.rob(root.right)
         
-        r = max([do, not_do])
-        
+        r = max(do, not_do)
         self.memo[root] = r
         
         return r
@@ -134,15 +110,47 @@ class Solution(object):
 
         return max(dp)
     
-# 413. Arithmetic Slices (Medium) 数组中等差递增子区间的个数
+    
+# 152. 乘积最大子数组
+# https://leetcode-cn.com/problems/maximum-product-subarray/solution/duo-chong-si-lu-qiu-jie-by-powcai-3/
 class Solution(object):
-    def numberOfArithmeticSlices(self, A):
+    def maxProduct(self, nums):
+        ans = curmin = curmax = nums[0]
+        for n in nums[1:]:
+            tmp = curmin
+            curmin = min(n, n*curmin, n*curmax)
+            curmax = max(n, n*tmp, n*curmax)
+            ans = max(ans, curmax)
+        return ans
+
+
+# 牛客 子数组累加最大和  
+class Solution:
+    def maxsumofSubarray(self , arr ):
+        # write code here
+        ma = premax = arr[0]
+        for n in arr[1:]: 
+            if premax > 0:
+                premax += n
+            ma = max(premax, ma)
+        return ma
+
+# 最长摆动子序列
+class Solution(object):
+    def wiggleMaxLength(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+        A = nums
+        if not A or len(A) == 0: return 0
         
-        dp = [0] * len(A)
-        for i in range(2, len(A)):
-            if A[i]-A[i-1] == A[i-1]-A[i-2]:
-                dp[i] = 1 + dp[i-1]
-        return sum(dp)
+        up, down = 1, 1
+        for i in range(1, len(A)):
+            if A[i] > A[i-1]: up = down + 1
+            elif A[i] < A[i-1]: down = up + 1
+        return max(up, down)
+            
     
 # 91. Decode Ways (Medium) (这里用了回溯算法，其实应该用动态规划复杂度要低，但是前者好理解)
 class Solution(object):
@@ -159,8 +167,7 @@ class Solution(object):
             
             for i in range(1, len(remain)+1):
                 prefix = remain[:i]
-                if prefix[0] == '0' or int(prefix) > 26:
-                    continue
+                if prefix[0] == '0' or int(prefix) > 26: continue
                 F(l + len(remain[:i]), remain[i:])
 
         F(0, s)
@@ -211,28 +218,8 @@ class Solution(object):
                     dp[i] = max(dp[i], 1 + dp[j])
         return max(dp)
     
-
-class Solution(object):
-    def wiggleMaxLength(self, nums):
-        """
-        :type nums: List[int]
-        :rtype: int
-        """
-        
-        A = nums
-        
-        if not A or len(A) == 0:
-            return 0
-        
-        up, down = 1, 1
-        for i in range(1, len(A)):
-            if A[i] > A[i-1]:
-                up = down + 1
-            elif A[i] < A[i-1]:
-                down = up + 1
-        return max(up, down)
     
-
+# 最长回文子序列
 class Solution(object):
     def longestPalindromeSubseq(self, s):
         """
@@ -634,23 +621,6 @@ class Solution(object):
                 dp[i][k][1] = max(dp[i-1][k][1], dp[i-1][k-1][0] - prices[i])
         return max(dp[-1][K][0], dp[-1][K][1])
 
-
-# 136 singlenum位运算 
-class Solution(object):
-    def singleNumbers(self, nums):
-        xor = reduce(lambda x,y: x ^ y, nums)
-        
-        mask = 1
-        while mask & xor == 0:
-            mask <<= 1 # 假设两个singlenumber是a,b，mask就是第一个a,b不相等的低位，通过mask对a, b分组
-        
-        a, b = 0, 0
-        for n in nums:
-            if mask & n == 0:
-                a ^= n
-            else:
-                b ^= n
-        return [a, b]
 
 # 714 
 class Solution(object):

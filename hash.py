@@ -16,6 +16,8 @@ class Solution(object):
         return [-1, -1]
 
 
+
+# 128. 最长连续序列      
 class Solution(object):
     def longestConsecutive(self, nums):
         """
@@ -23,34 +25,14 @@ class Solution(object):
         :rtype: int
         """
         
-        ma = 0
-        s = set(nums)
-        for n in nums:
-            # 这里应该有个 if n-1 not in s,可以提高速度
-            curNum = n
-            curLen = 1
-            while curNum + 1 in s:
-                curNum += 1
-                curLen += 1
-            ma = max(ma, curLen)
-        return ma
-
-
-class Solution(object):
-    def longestConsecutive(self, nums):
-        """
-        :type nums: List[int]
-        :rtype: int
-        """
-        
-        ma = 0
+        curLen = maxLen = 0 
         s = set(nums)
         for n in nums:
             if n-1 not in s:
-                curNum = n
                 curLen = 1
-                while curNum+1 in s:
+                curNum = 1 + n
+                while curNum in s:
                     curNum += 1
                     curLen += 1
-                ma = max(ma, curLen)
-        return ma
+            maxLen = max(maxLen, curLen)
+        return maxLen

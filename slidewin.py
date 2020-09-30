@@ -57,19 +57,15 @@ class Solution(object):
         :type s: str
         :rtype: int
         """
-        
         from collections import defaultdict
         
-        if not s:
-            return 0
-        
+        if not s: return 0
         maxLen = 1
         i = j = 0
         lookup = defaultdict(int)
         while j < len(s):
             lookup[s[j]] += 1
             j += 1
-            
             while any(map(lambda x: lookup[x] > 1, lookup.keys())):
                 lookup[s[i]] -= 1
                 i += 1
@@ -222,27 +218,6 @@ class Solution(object):
 #             maxLen = max(maxLen, curLen)
 #         return maxLen
        
-
-        
-# 128. 最长连续序列      
-class Solution(object):
-    def longestConsecutive(self, nums):
-        """
-        :type nums: List[int]
-        :rtype: int
-        """
-        
-        curLen = maxLen = 0 
-        s = set(nums)
-        for n in nums:
-            if n-1 not in s:
-                curLen = 1
-                curNum = 1 + n
-                while curNum in s:
-                    curNum += 1
-                    curLen += 1
-            maxLen = max(maxLen, curLen)
-        return maxLen
     
     
 # 1004. 最大连续1的个数 III          

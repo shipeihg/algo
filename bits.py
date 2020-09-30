@@ -15,6 +15,24 @@ class Solution(object):
             if n & diff == 0: a ^= n
             else: b ^= n
         return [a,b]
+    
+    
+# 136 singlenum位运算 
+class Solution(object):
+    def singleNumbers(self, nums):
+        xor = reduce(lambda x,y: x ^ y, nums)
+        
+        mask = 1
+        while mask & xor == 0:
+            mask <<= 1 # 假设两个singlenumber是a,b，mask就是第一个a,b不相等的低位，通过mask对a, b分组
+        
+        a, b = 0, 0
+        for n in nums:
+            if mask & n == 0:
+                a ^= n
+            else:
+                b ^= n
+        return [a, b]
         
 
 # 318. 最大单词长度乘积      

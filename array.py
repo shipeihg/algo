@@ -1,6 +1,6 @@
 
 
-# 283. 移动零
+# 283. 移动零 (快慢指针)
 class Solution(object):
     def moveZeroes(self, nums):
         """
@@ -13,6 +13,76 @@ class Solution(object):
                 nums[i], nums[j] = nums[j], nums[i]
                 i += 1 # 慢指针不会再非0处停留，换言之，他只会指向0处
             j += 1
+
+
+# 去除数组的重复数
+class Solution:
+    def removeDupliates(self, arr):
+        slow, fast = 0, 1
+        while fast < len(arr):
+            if arr[slow] != arr[fast]:
+                slow += 1
+                arr[slow] = arr[fast]
+            fast += 1
+        return arr[:slow+1]
+    
+    
+            
+
+# 将数组分为两部分，一半是可以被2整除，一半不可以，空间复杂度O(1)     
+class Solution:
+    def splitArray(self, nums):
+        pass
+
+
+# 寻找旋转排序数组中的最小值 II
+class Solution(object):
+    def findMin(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+        i,j=0,len(nums)-1
+        while i<j:
+            m=(i+j)>>1
+            if nums[m]>nums[j]: i=m+1
+            elif nums[m]<nums[j]:j=m # 吧中点作为有边界
+            else: j-=1 # 可能存在重复值，nums[m]==nums[j]的时候，指针应该向让nums[j]减小的方向移动
+        return nums[i]
+
+
+# 33. 搜索旋转排序数组
+class Solution(object):
+    def search(self, nums, target):
+        """
+        :type nums: List[int]
+        :type target: int
+        :rtype: int
+        """
+        
+        i,j = 0, len(nums)-1
+        while i < j:
+            m = (i+j) >> 1
+            if nums[m] > nums[j]: i = m + 1 # 说明m在前半段，需要右移动
+            else: j = m
+        splitPoint = i
+        
+        def find(A, key):
+            i,j = 0, len(A)-1
+            while i <= j:
+                m = (i + j) >> 1
+                if A[m]==key: return m
+                elif A[m] < key: i = m+1
+                else: j = m-1 
+            return -1
+
+        idx1, idx2 = find(nums[:splitPoint], target), find(nums[splitPoint:], target)
+        if idx1==idx2==-1: return -1
+        elif idx1==-1: return idx2 + splitPoint
+        elif idx2==-1: return idx1
+        
+    
+        
     
 # 485. 最大连续1的个数
 class Solution(object):
@@ -80,11 +150,7 @@ class Solution(object):
         lo, hi = matrix[0][0], matrix[-1][-1]
         while lo < hi:
             mid = (lo + hi) >> 1
-            cnt = 0
-            for i in range(m):
-                for j in range(n):
-                    if matrix[i][j] <= mid:
-                        cnt += 1
+            cnt = sum(matrix[i][j]<=mid for i in range(m) for j in range(n))
             if cnt < k: lo = mid + 1 
             else: hi = mid
         return lo

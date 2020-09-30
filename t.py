@@ -552,5 +552,19 @@ class Solution(object):
                 best = s
                 lo += 1
         return arr[lo:lo+k]
+
+
+
+def find_pairs(arr, k):
+    arr.sort()
+    i, j = 0, len(arr)-1
+    ans = None
+    min_val = float('inf')
+    while i < j:
+        val = arr[i] + arr[j]
+        if val < min_val:
+            ans = [arr[i], arr[j]]
+            min_val = val
+    return ans
         
         

@@ -56,33 +56,30 @@ class Solution(object):
         :type nums: List[int]
         :rtype: List[List[int]]
         """
-        
-        r = []
-        def F(path, choice):
-            if len(path) == len(nums):
-                r.append(path)
-            for i in range(len(choice)):
-                F(path + [choice[i]], choice[:i] + choice[i+1:])
-        F([], nums)
-        
-        rr = set(map(tuple, r))
-        rr = list(rr)
-        rr = [list(x) for x in rr]
-        return rr
+        nums.sort()
+        ans = []
+        def F(path, choices):
+            if len(path)==len(nums) and path not in ans:
+                ans.append(path)
+                return
+            for i in range(len(choices)):
+                F(path + [choices[i]], choices[:i] + choices[i+1:])
+        F([],nums)
+        return ans
         
 
 class Solution:
-    def subsets(self, nums):
-        r = []
-        s = set()
-        def F(start, path):
-            if tuple(path) not in s:
-                s.add(tuple(path))
-                r.append(path)
-                for i in range(start, len(nums)):
-                    F(start, path + [nums[i]])
-        F(0, [])
-        return r
+    def subsets(self , A ):
+        # write code here
+        ans = []
+        def F(path, choices):
+            if len(path) <= len(A):
+                ans.append(path)
+            
+            for i in range(len(choices)):
+                F(path + [choices[i]], choices[i+1:])
+        F([], A)
+        return ans
 
 # 90. 子集 II
 class Solution(object):
@@ -93,13 +90,14 @@ class Solution(object):
         """
         nums.sort() # 先排序！！！ 因为nums中含有重复项，且要求结果不能有重复的组合
         ans = []
-        def F(path, start):
-            if path not in ans:
+        def F(path, choices):
+            if len(path)<=len(nums) and path not in ans:
                 ans.append(path)
-                for i in range(start, len(nums)):
-                    F(path + [nums[i]], 1 + i)
-        F([], 0)
+            for i in range(len(choices)):
+                F(path+[choices[i]], choices[i+1:])
+        F([],nums)
         return ans
+
     
 #39. 组合总和 (candidates 中的数字可以无限制重复被选取。)
 class Solution(object):

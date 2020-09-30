@@ -1,99 +1,4 @@
-# Definition for a binary tree node.
-# class TreeNode(object):
-#     def __init__(self, x):
-#         self.val = x
-#         self.left = None
-#         self.right = None
 
-class Solution(object):
-        
-    def maxPathSum(self, root):
-        """
-        :type root: TreeNode
-        :rtype: int
-        """
-        
-        self.r = -float('inf')
-        
-        def F(root):
-            if not root:
-                return 0
-            
-            left = max(0, F(root.left))
-            right = max(0, F(root.right))
-            self.r = max(self.r, left + right + root.val)
-            return max(left, right) + root.val
-
-        F(root)
-        return self.r
-
-
-
-# 124. 通过前序遍历和中序遍历的值恢复二叉树
-class TreeNode(object):
-    def __init__(self, x):
-        self.val = x
-        self.left = None
-        self.right = None
-
-class Solution(object):
-    def buildTree(self, preorder, inorder):
-        """
-        :type preorder: List[int]
-        :type inorder: List[int]
-        :rtype: TreeNode
-        """
-        
-        if not inorder:
-            return None
-        
-        root = TreeNode(preorder[0])
-        
-        mid = inorder.index(preorder[0])
-        
-        root.left = self.buildTree(preorder[:mid+1], inorder[:mid])
-        root.right = self.buildTree(preorder[mid+1:], inorder[mid+1:])
-        return root
-
-
-# 99 修复错误的BST
-class TreeNode(object):
-    def __init__(self, val=0, left=None, right=None):
-        self.val = val
-        self.left = left
-        self.right = right
-        
-class Solution(object):
-    def recoverTree(self, root):
-        """
-        :type root: TreeNode
-        :rtype: None Do not return anything, modify root in-place instead.
-        """
-        
-        self.pre = TreeNode(float('-inf'))
-        self.first = None
-        self.second = None
-        
-        def F(root):
-            
-            if not root:
-                return 
-            
-            F(root.left)
-            
-            if not self.first and root.val < self.pre.val:
-                self.first = self.pre
-                self.second = root
-            elif self.first and root.val < self.pre.val:
-                self.second = root
-                
-            self.pre = root
-            
-            F(root.right)
-        
-        
-        F(root)
-        self.first.val, self.second.val = self.second.val, self.first.val
 
         
 # 160. 相交链表
@@ -108,9 +13,7 @@ class Solution(object):
         :type head1, head1: ListNode
         :rtype: ListNode
         """
-        
         pa, pb = headA, headB
-        
         while pa != pb:
             pa = pa.next if pa else headB
             pb = pb.next if pb else headA
@@ -145,21 +48,13 @@ class Solution(object):
         :type head: ListNode
         :rtype: ListNode
         """
-        
-        if not head:
-            return None
-        
         # 递归出口
-        if not head.next:
-            return head
-        
+        if not head or not head.next: return None
         # 拆解为子问题
         last = self.reverseList(head.next)
-        
         # 所有子问题的相同逻辑
         head.next.next = head
         head.next = None
-        
         return last
 
 
@@ -193,6 +88,17 @@ class Solution(object):
     
     con = None
     
+    def reverseTopN(self, head, n):
+            if not head:
+                return None
+            if n == 1:
+                self.con = head.next
+                return head
+            last = self.reverseTopN(head.next, n - 1)
+            head.next.next = head
+            head.next = self.con
+            return last
+    
     def reverseBetween(self, head, m, n):
         """
         :type head: ListNode
@@ -200,24 +106,9 @@ class Solution(object):
         :type n: int
         :rtype: ListNode
         """
-        
-        def reverseTopN(head, n):
-            if not head:
-                return None
-            if n == 1:
-                self.con = head.next
-                return head
-            
-            last = reverseTopN(head.next, n - 1)
-            head.next.next = head
-            head.next = self.con
-            return last
-        
         if m == 1:
-            return reverseTopN(head, n)
-        
+            return self.reverseTopN(head, n)
         head.next = self.reverseBetween(head.next, m-1, n-1)
-        
         return head
     
 
@@ -333,18 +224,24 @@ class Solution(object):
         :type head: ListNode
         :rtype: ListNode
         """  
-        
-        if not head or not head.next:
-            return head
-        
+        if not head or not head.next: return head
         # 第二步才轮到考虑子问题
         head.next = self.deleteDuplicates(head.next)
-        
         # 第一步应该先考虑 return 的结果，这里要分情况讨论
-        if head.val == head.next.val:
-            return head.next
+        if head.val == head.next.val: return head.next
+        else: return head
+
+# 82 删除排序链表中的重复元素 II
+class Solution(object):
+    def deleteDuplicates(self, head):
+        if not head or not head.next: return head
+        if head.next and head.val==head.next.val:
+            while head.next and head.val==head.next.val:
+                head = head.next
+            return self.deleteDuplicates(head.next)
         else:
-            return head
+            head.next = self.deleteDuplicates(head.next)
+        return head
         
 
 # 19. 删除链表的倒数第N个节点
@@ -497,21 +394,41 @@ class Solution(object):
 #         self.val = x
 #         self.next = None
 
-class Solution:
+class Solution(object):
     def oddEvenList(self, head):
-        if not head:
-            return head
-        
-        odd = head
-        even = even_head = head.next
-        
-        while odd.next and even.next:
+        """
+        :type head: ListNode
+        :rtype: ListNode
+        """
+        if not head or not head.next: return head
+        odd, even, evenhead = head, head.next, head.next
+        while even and even.next:
             odd.next = odd.next.next
             even.next = even.next.next
             odd = odd.next
             even = even.next
-        odd.next = even_head
+        odd.next = evenhead
         return head
+
+# 86. 分隔链表
+# 和奇偶链表像
+#https://leetcode-cn.com/problems/partition-list/solution/liang-ge-dummyran-hou-pin-jie-by-powcai/
+class Solution:
+    def partition(self , head , x ):
+        # write code here
+        p1 = head1 = ListNode(-1)
+        p2 = head2 = ListNode(-1)
+        while head:
+            if head.val < x:
+                p1.next = head
+                p1 = p1.next
+            else:
+                p2.next = head
+                p2 = p2.next
+            head = head.next
+        p1.next = head2.next
+        p2.next = None
+        return head1.next
 
 
 class Solution(object):
