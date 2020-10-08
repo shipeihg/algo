@@ -292,42 +292,6 @@ class Solution(object):
         return min(left, right)
         
 
-# 637. 二叉树的层平均值
-class Solution(object):
-    def averageOfLevels(self, root):
-        """
-        :type root: TreeNode
-        :rtype: List[float]
-        """
-        
-        cur, res = [root], 0
-        while cur:
-            nxt, res = [], sum(n.val for n in cur) / len(cur)
-            for node in cur:
-                if node.left: nxt.append(node.left)
-                if node.right: nxt.append(node.right)
-            cur = nxt
-        return res
-
-        
-# 513. 找树左下角的值       
-class Solution(object):
-    def findBottomLeftValue(self, root):
-        """
-        :type root: TreeNode
-        :rtype: int
-        """
-        
-        if not root: return []
-        cur, res = [root], root.val
-        while cur:
-            nxt, res = [], cur[0].val
-            for node in cur:
-                if node.left: nxt.append(node.left)
-                if node.right: nxt.append(node.right)
-            cur = nxt
-        return res
-
 
 # 669. 修剪二叉搜索树
 class Solution(object):

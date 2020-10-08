@@ -30,6 +30,25 @@ def solution():
 """
 
 
+# 93. 复原IP地址
+class Solution:
+    def restoreIpAddresses(self , s ):
+        # write code here
+        ans = []
+        def F(path, L, choices):
+            if len(path) == 4 and L == len(s):
+                ans.append('.'.join(path))
+                return
+            for i in range(1, len(choices)+1):
+                prefix = choices[:i]
+                if i > 3: continue 
+                if i > 1 and prefix[0] == '0': continue 
+                if int(prefix) > 255: continue
+                F(path + [prefix], L + i, choices[i:])
+        F([], 0, s)
+        return ans
+
+
 # 46. 全排列
 class Solution(object):
     def permute(self, nums):
@@ -183,10 +202,10 @@ class Solution(object):
                 r.append(path)
                 return
 
-            for col in range(n):
-                if col in path:
+            for col in range(n): # 选择
+                if col in path: # 垂直方向不能共线
                     continue
-                if  path and any(abs(len(path)-i)==abs(col-j) for i,j in enumerate(path)): 
+                if  path and any(abs(len(path)-i)==abs(col-j) for i,j in enumerate(path)): # 对角方向不能共线
                     continue
                 F(path + [col]) # 接下来的选择完全可以通过path来排除
         F([])

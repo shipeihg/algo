@@ -36,3 +36,20 @@ class Solution(object):
                     curLen += 1
             maxLen = max(maxLen, curLen)
         return maxLen
+
+
+# 560. 和为K的子数组   
+class Solution(object):
+    def subarraySum(self, nums, k):
+        """
+        :type nums: List[int]
+        :type k: int
+        :rtype: int
+        """
+        
+        preSum = {0: 1}; sm = 0; ret = 0
+        for n in nums:
+            sm += n
+            ret += preSum.get(sm-k, 0)
+            preSum[sm] = preSum.get(sm, 0) + 1
+        return ret

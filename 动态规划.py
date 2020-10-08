@@ -30,7 +30,6 @@ class Solution(object):
 
 class Solution(object):
     def rob(self, nums):
-        
         if len(nums) == 1:
             return nums[0]
         
@@ -57,7 +56,6 @@ class Solution(object):
 class Solution(object):
     
     memo = {}
-    
     def rob(self, root):
         if not root: return 0
         if self.memo.get(root): return self.memo.get(root)
@@ -72,29 +70,37 @@ class Solution(object):
         
         return r
     
-           
+# 120 三角形最小路径和     
 class Solution(object):
     def minimumTotal(self, triangle):
         """
         :type triangle: List[List[int]]
         :rtype: int
         """
-        
         A = triangle
-        
         for i in range(len(A)):
             for j in range(len(A[0])):
-                if i == j == 0:
-                    continue
-                elif j == 0:
-                    A[i][j] += A[i-1][j]
-                elif j == i:
-                    A[i][j] += A[i-1][i-1]
-                else:
-                    A[i][j] += min([A[i-1][j-1], A[i-1][j]])
+                if i == j == 0: continue
+                elif j == 0: A[i][j] += A[i-1][0] # 处于当前行的开始
+                elif j == i: A[i][j] += A[i-1][i-1] # 处于当前行的末尾
+                else: A[i][j] += min([A[i-1][j-1], A[i-1][j]])
         return min(A[-1])
-    
 
+# 最长公共子串 (注意不是子序列)
+class Solution:
+    def LCS(self , s1 , s2 ):
+        # write code here
+        m, n = len(s1), len(s2)
+        dp = [[0]*(1+n) for _ in range(1+m)]
+        lcs = 0
+        for i in range(1,1+m):
+            for j in range(1,1+n):
+                if s1[i-1] == s2[j-1]:
+                    dp[i][j] = 1 + dp[i-1][j-1]
+                    lcs = max(lcs, dp[i][j])
+        return lcs
+    
+# 最长上升子序列
 class Solution(object):
     def lengthOfLIS(self, nums):
         """
@@ -107,7 +113,25 @@ class Solution(object):
             for j in range(i):
                 if A[i] > A[j]:
                     dp[i] = max(dp[i], 1 + dp[j])
+        return max(dp)
 
+
+# 类似于最长上升子序列的题
+class Solution(object):
+    def findLongestChain(self, pairs):
+        """
+        :type pairs: List[List[int]]
+        :rtype: int
+        """
+        
+        A = pairs
+        A.sort(key=lambda x: x[1])
+        
+        dp = [1] * len(A)
+        for i in range(1, len(dp)):
+            for j in range(i):
+                if A[i][0] > A[j][1]:
+                    dp[i] = max(dp[i], 1 + dp[j])
         return max(dp)
     
     
@@ -144,7 +168,6 @@ class Solution(object):
         """
         A = nums
         if not A or len(A) == 0: return 0
-        
         up, down = 1, 1
         for i in range(1, len(A)):
             if A[i] > A[i-1]: up = down + 1
@@ -159,17 +182,15 @@ class Solution(object):
         :type s: str
         :rtype: int
         """
-        
         self.count = 0
         def F(l, remain):
             if l == len(s):
                 self.count += 1
-            
+                return 
             for i in range(1, len(remain)+1):
                 prefix = remain[:i]
-                if prefix[0] == '0' or int(prefix) > 26: continue
-                F(l + len(remain[:i]), remain[i:])
-
+                if i > 3 or prefix[0] == '0' or int(prefix) > 26: continue
+                F(l + i, remain[i:])
         F(0, s)
         return self.count
 
@@ -177,46 +198,18 @@ class Solution(object):
 # 91. Decode Ways (Medium)
 class Solution(object):
     def numDecodings(self, s):
-        """
-        :type s: str
-        :rtype: int
-        """
         
-        if s[0] == '0':
-            return 0
-        
+        if s[0] == '0': return 0
         dp = [0] * (len(s) + 1)
         dp[0], dp[1] = 1, 1
         for i in range(1, len(s)):
             if s[i] == '0':
-                if s[i-1] == '1' or s[i-1] == '2':
-                    dp[i+1] = dp[i-1]
-                else:
-                    return 0
+                if s[i-1] == '1' or s[i-1] == '2': dp[i+1] = dp[i-1]
+                else: return 0
             else:
-                if s[i-1] == '1' or (s[i-1] == '2' and int(s[i]) <= 6):
-                    dp[i+1] = dp[i-1] + dp[i]
-                else:
-                    dp[i+1] = dp[i]
+                if s[i-1] == '1' or (s[i-1] == '2' and int(s[i]) <= 6): dp[i+1] = dp[i-1] + dp[i]
+                else: dp[i+1] = dp[i]
         return dp[-1]
-
-
-class Solution(object):
-    def findLongestChain(self, pairs):
-        """
-        :type pairs: List[List[int]]
-        :rtype: int
-        """
-        
-        A = pairs
-        A.sort(key=lambda x: x[1])
-        
-        dp = [1] * len(A)
-        for i in range(1, len(dp)):
-            for j in range(i):
-                if A[i][0] > A[j][1]:
-                    dp[i] = max(dp[i], 1 + dp[j])
-        return max(dp)
     
     
 # 最长回文子序列
@@ -230,15 +223,11 @@ class Solution(object):
         N = len(s)
         dp = [[0] * N for _ in range(N)]
         
-        for i in range(N):
-            dp[i][i] = 1
-        
+        for i in range(N): dp[i][i] = 1
         for i in range(N-1, -1, -1):
             for j in range(i+1, N):
-                if s[i] == s[j]:
-                    dp[i][j] = 2 + dp[i+1][j-1]
-                else:
-                    dp[i][j] = max(dp[i][j-1], dp[i+1][j])
+                if s[i] == s[j]: dp[i][j] = 2 + dp[i+1][j-1]
+                else: dp[i][j] = max(dp[i][j-1], dp[i+1][j])
         return dp[0][N-1]
 
 
@@ -297,7 +286,6 @@ class Solution(object):
         "(完全背包问题，即数组中的元素可重复使用，nums放在外循环，target在内循环。且内循环正序。)"
         这里并没有采用这一原则！
         """
-        
         dp = [1 + amount] * (1 + amount) # 初始化一个不可能的值，若计算结果仍然未变，则说明没有合适的组合
         dp[0] = 0 
         
@@ -345,54 +333,12 @@ class Solution(object):
                 if i >= num:
                     dp[i] += dp[i - num]
         return dp[-1]
-    
 
-class Solution(object):
-    def findTargetSumWays(self, nums, S):
-        """
-        :type nums: List[int]
-        :type S: int
-        :rtype: int
-        """
-        
-        
-        self.r = 0
-        def F(path, start):
-            if len(path) == len(nums):
-                if sum(path) == S:
-                    self.r += 1
-                return
-            F(path + [nums[start]], 1 + start)
-            F(path + [-nums[start]], 1 + start)
-        F([], 0)
-        return self.r
-
-
-
-          
-                
-## 单词分割(错误解法)
-# class Solution:
-#     def wordBreak(self, s, wordDict): 
-#         dp = [[False] * (1 + len(s)) for _ in range(1 + len(wordDict))]
-        
-#         for i in range(1 + len(wordDict)):
-#             dp[i][0] = True
-        
-#         for i in range(1, 1 + len(wordDict)):
-#             for j in range(1, 1 + len(s)):
-#                 if j >= len(wordDict[i-1]) and wordDict[i-1] == s[j-len(wordDict[i-1]) : j]:
-#                     dp[i][j] = dp[i-1][j] or dp[i][j - len(wordDict[i-1])]
-#                 else:
-#                     dp[i][j] = dp[i-1][j]
-#         print dp
-#         return dp[-1][-1]
 
 # 单词切割 完全背包问题(考虑顺序)
 class Solution:
     def wordBreak(self, s, wordDict): 
         dp = [True] + [False] * len(s)
-        
         for i in range(1, len(dp)):
             for w in wordDict:
                 if i >= len(w) and s[i-len(w) : i] == w:
@@ -400,30 +346,24 @@ class Solution:
         return dp[-1]
  
 
-# 416. 分割等和子集 0-1背包问题 (采用二维数组，正序)
-class Solution(object):
-    def canPartition(self, nums):
-        """
-        :type nums: List[int]
-        :rtype: bool
-        """
+# # 416. 分割等和子集 0-1背包问题 (采用二维数组，正序)
+# class Solution(object):
+#     def canPartition(self, nums):
+#         """
+#         :type nums: List[int]
+#         :rtype: bool
+#         """
+#         s = sum(nums) % 2
+#         if s == 1: return False
         
-        s = sum(nums) % 2
-        if s == 1:
-            return False
-        
-        dp = [[False] * (1 + s) for _ in range(1 + len(nums))]
-        
-        for i in range(1 + len(nums)):
-            dp[i][0] = True
-        
-        for i in range(1, 1 + len(nums)):
-            for j in range(1, 1 + s):
-                if j < nums[i-1]:
-                    dp[i][j] = dp[i-1][j] # 都是用到了 i-1层
-                else:
-                    dp[i][j] = dp[i-1][j] or dp[i-1][j-nums[i-1]] # 都是用到了 i-1层
-        return dp[-1][-1]
+#         dp = [[False] * (1 + s) for _ in range(1 + len(nums))]
+#         for i in range(1 + len(nums)): dp[i][0] = True
+#         for i in range(1, 1 + len(nums)):
+#             for j in range(1, 1 + s):
+#                 if j < nums[i-1]: dp[i][j] = dp[i-1][j] # 都是用到了 i-1层
+#                 else: dp[i][j] = dp[i-1][j] or dp[i-1][j-nums[i-1]] # 都是用到了 i-1层
+#         return dp[-1][-1]
+
 
 # 416. 分割等和子集: 数组是否可以分割为两部分使得两部分的和相等 0-1背包问题 (采用一维数组，倒叙)
 # 0-1背包问题，nums(物品列表)在外层循环; target在内层循环，为倒叙 
@@ -443,23 +383,23 @@ class Solution(object):
         return dp[-1]
     
     
-# 474. 一和零 (0-1背包的多为问题，整理思路，3维数组，正序，非最优解)
-class Solution:
-    # https://leetcode-cn.com/problems/ones-and-zeroes/solution/dong-tai-gui-hua-zhuan-huan-wei-0-1-bei-bao-wen-ti/
+# # 474. 一和零 (0-1背包的多为问题，整理思路，3维数组，正序，非最优解)
+# class Solution:
+#     # https://leetcode-cn.com/problems/ones-and-zeroes/solution/dong-tai-gui-hua-zhuan-huan-wei-0-1-bei-bao-wen-ti/
     
-    def findMaxForm(self, strs, m, n):
-        import numpy as np
-        l = len(strs)
-        dp = np.zeros((1+l, 1+m, 1+n), dtype=np.int32).tolist()
-        for i in range(1, l + 1):
-            for j in range(m + 1):
-                for k in range(n + 1):
-                    ones = strs[i - 1].count("1")
-                    zeros = strs[i - 1].count("0")
-                    dp[i][j][k] = dp[i - 1][j][k] # 只有我的背包有容量的时候才进行更新，没有容量的时候要此时 dp[i][j][k]=dp[i-1][j][k]
-                    if j >= zeros and k >= ones:  # 遍历到i时，背包有空余容量装入此时的 0s 1s
-                        dp[i][j][k] = max(dp[i - 1][j - zeros][k - ones] + 1, dp[i-1][j][k])
-        return dp[-1][-1][-1]
+#     def findMaxForm(self, strs, m, n):
+#         import numpy as np
+#         l = len(strs)
+#         dp = np.zeros((1+l, 1+m, 1+n), dtype=np.int32).tolist()
+#         for i in range(1, l + 1):
+#             for j in range(m + 1):
+#                 for k in range(n + 1):
+#                     ones = strs[i - 1].count("1")
+#                     zeros = strs[i - 1].count("0")
+#                     dp[i][j][k] = dp[i - 1][j][k] # 只有我的背包有容量的时候才进行更新，没有容量的时候要此时 dp[i][j][k]=dp[i-1][j][k]
+#                     if j >= zeros and k >= ones:  # 遍历到i时，背包有空余容量装入此时的 0s 1s
+#                         dp[i][j][k] = max(dp[i - 1][j - zeros][k - ones] + 1, dp[i-1][j][k])
+        # return dp[-1][-1][-1]
 
 # 474. 一和零 (0-1背包问题；降维后二维数组，倒叙)
 class Solution(object):
@@ -473,7 +413,6 @@ class Solution(object):
         
         dp = [[0] * (n+1) for _ in range(m+1)]
         for s in strs:
-            
             one = s.count('1')
             zero = s.count('0')
             
@@ -639,13 +578,11 @@ class Solution(object):
         :type n: int
         :rtype: int
         """
-        
         def F(n):
             if n == 1:
                 return 0
             for i in range(int(n/2), 1, -1):
-                if n % i == 0:
-                    return F(i) + n / i
+                if n % i == 0: return F(i) + n / i
             return n
         return F(n)
             
@@ -658,436 +595,53 @@ class Solution(object):
         :type word2: str
         :rtype: int
         """
-        
         import numpy as np
-        
-        s = word1
-        t = word2
-        
-        M = len(s)
-        N = len(t)
-        
+        s = word1; t = word2; M = len(s); N = len(t)
         dp = np.zeros((M+1, N+1)).tolist()
-        
-        for j in range(N+1):
-            dp[0][j] = j
-        for i in range(M+1):
-            dp[i][0] = i
-        
+        for j in range(N+1): dp[0][j] = j
+        for i in range(M+1): dp[i][0] = i
         for i in range(1, 1+M):
             for j in range(1, 1+N):
-                if s[i-1] == t[j-1]:
-                    dp[i][j] = dp[i-1][j-1]
-                else:
-                    dp[i][j] = min(
-                        1 + dp[i-1][j],
-                        1 + dp[i][j-1],
-                        1 + dp[i-1][j-1]
-                    )
+                if s[i-1] == t[j-1]: dp[i][j] = dp[i-1][j-1]
+                else: dp[i][j] = 1 + min(dp[i-1][j], dp[i][j-1], dp[i-1][j-1])
         return dp[-1][-1]
 
 
-                
-    
-            
-class Solution(object):
-    def findMaxForm(self, strs, m, n):
-        """
-        :type strs: List[str]
-        :type m: int
-        :type n: int
-        :rtype: int
-        """
-        import numpy as np
-        l = len(strs)
-        dp = np.zeros((1+l, 1+m, 1+n)):
-        for i in range(1, 1+l):
-            for j in range(1+m):
-                for k in range(1+n):
-                    zeros = strs[i-1].count('0')
-                    ones = strs[i-1].count('1')
-                    if j >= zeros and k >= ones:
-                        dp[i][j][k] = max(dp[i-1][j][k], dp[i-1][j-zeros][k-ones])
-        return dp[-1][-1][-1]
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-
-
-# Definition for a binary tree node.
-# class TreeNode(object):
-#     def __init__(self, x):
-#         self.val = x
-#         self.left = None
-#         self.right = None
-
-class Solution(object):
-        
-    def maxPathSum(self, root):
-        """
-        :type root: TreeNode
-        :rtype: int
-        """
-        
-        self.r = -float('inf')
-        
-        def F(root):
-            if not root:
-                return 0
-            
-            left = max(0, F(root.left))
-            right = max(0, F(root.right))
-            self.r = max(self.r, left + right + root.val)
-            return max(left, right) + root.val
-
-        F(root)
-        return self.r
-
-
-
-# 124. 通过前序遍历和中序遍历的值恢复二叉树
-class TreeNode(object):
-    def __init__(self, x):
-        self.val = x
-        self.left = None
-        self.right = None
-
-class Solution(object):
-    def buildTree(self, preorder, inorder):
-        """
-        :type preorder: List[int]
-        :type inorder: List[int]
-        :rtype: TreeNode
-        """
-        
-        if not inorder:
-            return None
-        
-        root = TreeNode(preorder[0])
-        
-        mid = inorder.index(preorder[0])
-        
-        root.left = self.buildTree(preorder[:mid+1], inorder[:mid])
-        root.right = self.buildTree(preorder[mid+1:], inorder[mid+1:])
-        return root
-
-
-# 99 修复错误的BST
-class TreeNode(object):
-    def __init__(self, val=0, left=None, right=None):
-        self.val = val
-        self.left = left
-        self.right = right
-        
-class Solution(object):
-    def recoverTree(self, root):
-        """
-        :type root: TreeNode
-        :rtype: None Do not return anything, modify root in-place instead.
-        """
-        
-        self.pre = TreeNode(float('-inf'))
-        self.first = None
-        self.second = None
-        
-        def F(root):
-            
-            if not root:
-                return 
-            
-            F(root.left)
-            
-            if not self.first and root.val < self.pre.val:
-                self.first = self.pre
-                self.second = root
-            elif self.first and root.val < self.pre.val:
-                self.second = root
-                
-            self.pre = root
-            
-            F(root.right)
-        
-        
-        F(root)
-        self.first.val, self.second.val = self.second.val, self.first.val
-
-        
-# 160. 相交链表
-class ListNode(object):
-    def __init__(self, x):
-        self.val = x
-        self.next = None
-
-class Solution(object):
-    def getIntersectionNode(self, headA, headB):
-        """
-        :type head1, head1: ListNode
-        :rtype: ListNode
-        """
-        
-        pa, pb = headA, headB
-        
-        while pa != pb:
-            pa = pa.next if pa else headB
-            pb = pb.next if pb else headA
-        return pa
-
-# 206. 反转链表
-class ListNode(object):
-    def __init__(self, x):
-        self.val = x
-        self.next = None
-
-# class Solution(object):
-#     def reverseList(self, head):
-#         """
-#         :type head: ListNode
-#         :rtype: ListNode
-#         """
-        
-#         pre = None
-#         cur = head
-#         while cur:
-#             t = cur.next
-#             cur.next = pre
-#             pre = cur
-#             cur = t
-#         return pre
-
-
-class Solution(object):
-    def reverseList(self, head):
-        """
-        :type head: ListNode
-        :rtype: ListNode
-        """
-        
-        if not head:
-            return None
-        
-        # 递归出口
-        if not head.next:
-            return head
-        
-        # 拆解为子问题
-        last = self.reverseList(head.next)
-        
-        # 所有子问题的相同逻辑
-        head.next.next = head
-        head.next = None
-        
-        return last
-
-
-# 反转链表的前 n 个节点
-class Solution(object):
-    def reverseN(self, head, n):
-        
-        if not head:
-            return None
-        
-        if n == 1:
-            con = head.next
-            return head
-        
-        last = self.reverseN(head.next, n - 1)
-        
-        head.next.next = head
-        head.next = con
-        
-        return last
-
-
-# 92. 反转链表 II
-# Definition for singly-linked list.
-# class ListNode(object):
-#     def __init__(self, x):
-#         self.val = x
-#         self.next = None
-
-class Solution(object):
-    
-    con = None
-    
-    def reverseBetween(self, head, m, n):
-        """
-        :type head: ListNode
-        :type m: int
-        :type n: int
-        :rtype: ListNode
-        """
-        
-        def reverseTopN(head, n):
-            if not head:
-                return None
-            if n == 1:
-                self.con = head.next
-                return head
-            
-            last = reverseTopN(head.next, n - 1)
-            head.next.next = head
-            head.next = self.con
-            return last
-        
-        if m == 1:
-            return reverseTopN(head, n)
-        
-        head.next = self.reverseBetween(head.next, m-1, n-1)
-        
-        return head
-    
-
-# 反转a、b之间的节点,其中a是头结点
+# 221. 最大正方形
+# https://leetcode-cn.com/problems/maximal-square/solution/dong-tai-gui-hua-han-kong-jian-you-hua-221-zui-da-/
+# # dp[i][j]表示以matrix[i][j]为右下角的顶点的可以组成的最大正方形的边长
 class Solution:
-    con = None
-    def reverseBetweenAB(self, a, b):
-        if a == b:
-            self.con = a.next
-            return a
-        last = self.reverseBetweenAB(a.next, b)
-        a.next.next = a
-        a.next = self.con
-        return last
-        
+    def maximalSquare(self, mat):
+        m = len(mat)
+        if m == 0: return 0
+        n = len(mat[0])
+        ans = 0
+        dp = [(1+n)*[0] for _ in range(1+m)] # 在原来的数组mat上包了一层边儿
+        for i in range(1, 1+m):
+            for j in range(1, 1+n):
+                dp[i][j] = 1 + min(dp[i-1][j], dp[i][j-1], dp[i-1][j-1]) if mat[i-1][j-1] == '1' else 0 # 注意mat[i-1][j-1]，因为包边儿了
+                ans = max(ans, dp[i][j])
+        return ans**2
 
-# 25. K 个一组翻转链表   
-# Definition for singly-linked list.
-# class ListNode(object):
-#     def __init__(self, x):
-#         self.val = x
-#         self.next = None
 
+# 354. 俄罗斯套娃信封问题
+# 按照宽度升序后，按照h降序，因为宽度一样时不能嵌套，索性就把h大的移动到前面（降序）
 class Solution(object):
-    
-    con = None
-    
-    def reverseBetween(self, a, b):
-        
-        # 迭代法
-        # pre = None
-        # cur = a
-        # while cur != b:
-        #     t = cur.next
-        #     cur.next = pre
-        #     pre = cur
-        #     cur = t
-        # return pre
-        
-        # 递归法
-        if a == b:
-            self.con = a.next
-            return a
-        last = self.reverseBetween(a.next, b)
-        a.next.next = a
-        a.next = self.con
-        return last
-    
-    def reverseKGroup(self, head, k):
+    def maxEnvelopes(self, envelopes):
         """
-        :type head: ListNode
-        :type k: int
-        :rtype: ListNode
+        :type envelopes: List[List[int]]
+        :rtype: int
         """
-
-        if not head: 
-            return None
+        if not envelopes: return 0
+        envelopes.sort(key=lambda x: (x[0], -x[1]))
+        arr = [x[1] for x in envelopes]
+        dp = [1]*len(arr)
+        for i in range(len(arr)):
+            for j in range(i):
+                if arr[i] > arr[j]: 
+                    dp[i] = max(dp[i], 1+dp[j])
+        return max(dp)
         
-        a = b = head
         
-        for _ in range(k):
-            if not b:
-                return head
-            b = b.next
-        
-        new_head = self.reverseBetween(a, b)
-        a.next = self.reverseKGroup(b, k)
-        
-        return new_head  
-    
-    
-# 21. 合并两个有序链表   
-# Definition for singly-linked list.
-# class ListNode(object):
-#     def __init__(self, x):
-#         self.val = x
-#         self.next = None
-
-class Solution(object):
-    def mergeTwoLists(self, l1, l2):
-        """
-        :type l1: ListNode
-        :type l2: ListNode
-        :rtype: ListNode
-        """
-        
-        a, b = l1, l2
-        
-        if not a: 
-            return b
-        if not b:
-            return a
-        
-        if a.val <= b.val:
-            a.next = self.mergeTwoLists(a.next, b)
-            return a
-        else:
-            b.next = self.mergeTwoLists(a, b.next)
-            return b
-        
-    
-    
-# 83. 删除排序链表中的重复元素    
-# Definition for singly-linked list.
-# class ListNode(object):
-#     def __init__(self, x):
-#         self.val = x
-#         self.next = None
-
-class Solution(object):
-    def deleteDuplicates(self, head):
-        """
-        :type head: ListNode
-        :rtype: ListNode
-        """  
-        
-        if not head or not head.next:
-            return head
-        
-        head.next = self.deleteDuplicates(head.next)
-        
-        if head.val == head.next.val:
-            return head.next
-        else:
-            return head
-
-                
-    
-    
-    
-    
 
 
-
-        
-        
-        

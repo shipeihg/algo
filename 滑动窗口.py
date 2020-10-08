@@ -12,7 +12,7 @@ while right < s.size():
     lookup.add(s[right])
     right++
     
-    while (求【最小或等长串】的时候是【所有】满足某个条件; 求【最大串】的时候要【存在】某个字符满足条件):
+    while (对lookup进行分析！求【最小或等长串】的时候是【所有】满足某个条件; 求【最大串】的时候要【存在】某个字符满足条件):
         【1】若求【最短】就在内循环
         lookup.remvove(s[left])
         left++

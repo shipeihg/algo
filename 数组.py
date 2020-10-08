@@ -1,30 +1,15 @@
 
 
-# 283. 移动零 (快慢指针)
-class Solution(object):
-    def moveZeroes(self, nums):
-        """
-        :type nums: List[int]
-        :rtype: None Do not return anything, modify nums in-place instead.
-        """
-        i = j = 0 # 快慢指针
-        while j < len(nums):
-            if nums[j] != 0:
-                nums[i], nums[j] = nums[j], nums[i]
-                i += 1 # 慢指针不会再非0处停留，换言之，他只会指向0处
-            j += 1
-
-
-# 去除数组的重复数
+# 查找数组中大于一半数量的元素
 class Solution:
-    def removeDupliates(self, arr):
-        slow, fast = 0, 1
-        while fast < len(arr):
-            if arr[slow] != arr[fast]:
-                slow += 1
-                arr[slow] = arr[fast]
-            fast += 1
-        return arr[:slow+1]
+    def majorityElement(self, numbers):
+        # write code here
+        votes = 0
+        for num in numbers:
+            if votes == 0: x = num
+            if num == x: votes += 1
+            else: votes -= 1
+        return x
     
     
             
@@ -34,54 +19,6 @@ class Solution:
     def splitArray(self, nums):
         pass
 
-
-# 寻找旋转排序数组中的最小值 II
-class Solution(object):
-    def findMin(self, nums):
-        """
-        :type nums: List[int]
-        :rtype: int
-        """
-        i,j=0,len(nums)-1
-        while i<j:
-            m=(i+j)>>1
-            if nums[m]>nums[j]: i=m+1
-            elif nums[m]<nums[j]:j=m # 吧中点作为有边界
-            else: j-=1 # 可能存在重复值，nums[m]==nums[j]的时候，指针应该向让nums[j]减小的方向移动
-        return nums[i]
-
-
-# 33. 搜索旋转排序数组
-class Solution(object):
-    def search(self, nums, target):
-        """
-        :type nums: List[int]
-        :type target: int
-        :rtype: int
-        """
-        
-        i,j = 0, len(nums)-1
-        while i < j:
-            m = (i+j) >> 1
-            if nums[m] > nums[j]: i = m + 1 # 说明m在前半段，需要右移动
-            else: j = m
-        splitPoint = i
-        
-        def find(A, key):
-            i,j = 0, len(A)-1
-            while i <= j:
-                m = (i + j) >> 1
-                if A[m]==key: return m
-                elif A[m] < key: i = m+1
-                else: j = m-1 
-            return -1
-
-        idx1, idx2 = find(nums[:splitPoint], target), find(nums[splitPoint:], target)
-        if idx1==idx2==-1: return -1
-        elif idx1==-1: return idx2 + splitPoint
-        elif idx2==-1: return idx1
-        
-    
         
     
 # 485. 最大连续1的个数
@@ -167,40 +104,6 @@ class Solution(object):
     #     return cnt
 
 
-# 287. 寻找重复数
-class Solution(object):
-    def findDuplicate(self, nums):
-        """
-        :type nums: List[int]
-        :rtype: int
-        """
-
-        i,j = 0, len(nums)-1
-        while i<j:
-            m = (i+j) >> 1
-            cnt = sum(num <= m for num in nums)
-            if cnt <= m: i = m + 1
-            else: j = m
-        return i
-
-
-# 378. 有序矩阵中第K小的元素
-class Solution(object):
-    def kthSmallest(self, matrix, k):
-        """
-        :type matrix: List[List[int]]
-        :type k: int
-        :rtype: int
-        """
-
-        r, c = len(matrix), len(matrix[0])
-        i, j = matrix[0][0], matrix[-1][-1]
-        while i < j:
-            m = (i + j) >> 1
-            cnt = sum(matrix[x][y] <= m for x in range(r) for y in range(c))
-            if cnt < k: i = m + 1 # 若<=中值的个数cnt小于k,则第k个值肯定在中值的右侧
-            else: j = m
-        return i
 
 # 59. 螺旋矩阵II
 class Solution(object):
@@ -249,23 +152,6 @@ class Solution(object):
             down -= 1
             for i in range(down, up-1, -1): ret.append(matrix[i][left]); cnt += 1
             left += 1
-        return ret
-    
-
-# 560. 和为K的子数组   
-class Solution(object):
-    def subarraySum(self, nums, k):
-        """
-        :type nums: List[int]
-        :type k: int
-        :rtype: int
-        """
-        
-        preSum = {0: 1}; sm = 0; ret = 0
-        for n in nums:
-            sm += n
-            ret += preSum.get(sm-k, 0)
-            preSum[sm] = preSum.get(sm, 0) + 1
         return ret
 
 

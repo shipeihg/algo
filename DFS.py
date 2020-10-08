@@ -9,23 +9,20 @@ class Solution(object):
         :type newColor: int
         :rtype: List[List[int]]
         """
-        
-        def fill(image, x, y, originColor, newColor):            
-            if not (0<=x<len(image) and 0<=y<len(image[0])): return
-            if image[x][y] != originColor: return
-            if image[x][y] == -1: return # 已经被访问过了，防止重复访问
-            
-            image[x][y] = -1 # 作为访问过得标记，避免重复访问
-            fill(image, x+1, y, originColor, newColor)
-            fill(image, x-1, y, originColor, newColor)
-            fill(image, x, y-1, originColor, newColor)
-            fill(image, x, y+1, originColor, newColor)
-            image[x][y] = newColor
-        
-        
         originColor = image[sr][sc]
-        fill(image, sr, sc, originColor, newColor)
+        if originColor == newColor: return image # 要判断新老色是否相同，相同就直接返回得了
+        self.fill(image, sr, sc, originColor, newColor)
         return image
+
+    def fill(self, image, i, j, o, t):
+        m, n = len(image), len(image[0])
+        if not (0 <= i < m and 0 <= j < n): return 
+        if image[i][j] != o: return 
+        image[i][j] = t
+        self.fill(image, i-1, j, o, t)
+        self.fill(image, i+1, j, o, t)
+        self.fill(image, i, j-1, o, t)
+        self.fill(image, i, j+1, o, t)
 
 
 # 529. 扫雷游戏

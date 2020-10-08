@@ -13,7 +13,7 @@ while 队列Q不空:
     if 满足返回条件: return step
     邻域 = choice符合边界条件的邻域（这个领域，可以看成是层的概念）
     for c in 邻域:
-        标记c
+        标记c ==> 这个特别重要，防止死循环
         Q.append(c, 1+step)
 
 收尾工作 (return xxx 或 后续判断)
@@ -37,7 +37,7 @@ class Solution(object):
                 [(r+1,c), (r+1,c-1), (r+1,c+1),(r,c+1),(r,c-1),(r-1,c),(r-1,c-1),(r-1,c+1)])
         
         q = collections.deque() # 准备好队列
-        q.append((0, 0, 1)) # 队列填充初始值，其中前俩为坐标，最后一个”1“为待返回的初始值
+        q.append((0, 0, 1)) # 队列填充初始值，其中前俩为坐标，最后一个”1“为步数
         while q:
             x, y, path = q.popleft()
             if x==y==N-1: return path # 一旦弹出的值符合条件，即返回
@@ -140,4 +140,42 @@ class Solution(object):
         return 0
         
 
+
+#### 关于树的BFS，没啥难的
+
+# 637. 二叉树的层平均值
+class Solution(object):
+    def averageOfLevels(self, root):
+        """
+        :type root: TreeNode
+        :rtype: List[float]
+        """
+        
+        cur, res = [root], 0
+        while cur:
+            nxt, res = [], sum(n.val for n in cur) / len(cur)
+            for node in cur:
+                if node.left: nxt.append(node.left)
+                if node.right: nxt.append(node.right)
+            cur = nxt
+        return res
+
+        
+# 513. 找树左下角的值       
+class Solution(object):
+    def findBottomLeftValue(self, root):
+        """
+        :type root: TreeNode
+        :rtype: int
+        """
+        
+        if not root: return []
+        cur, res = [root], root.val
+        while cur:
+            nxt, res = [], cur[0].val
+            for node in cur:
+                if node.left: nxt.append(node.left)
+                if node.right: nxt.append(node.right)
+            cur = nxt
+        return res
         

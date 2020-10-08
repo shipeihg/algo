@@ -18,6 +18,33 @@ class Solution(object):
             pa = pa.next if pa else headB
             pb = pb.next if pb else headA
         return pa
+    
+# 141. 环形链表 
+class Solution:
+    def hasCycle(self , head ):
+        # write code here
+        
+        if not head or not head.next: return False
+        slow = fast = head
+        while 1:
+            if not (fast and fast.next): return False
+            slow, fast = slow.next, fast.next.next
+            if slow == fast: return True
+            
+
+# 142. 环形链表 II (返回链表开始入环的第一个节点) 
+# https://leetcode-cn.com/problems/linked-list-cycle-ii/solution/linked-list-cycle-ii-kuai-man-zhi-zhen-shuang-zhi-/
+class Solution(object):
+    def detectCycle(self, head):
+        fast, slow = head, head
+        while True:
+            if not (fast and fast.next): return
+            fast, slow = fast.next.next, slow.next
+            if fast == slow: break
+        fast = head
+        while fast != slow:
+            fast, slow = fast.next, slow.next
+        return fast
 
 # 206. 反转链表
 class ListNode(object):
@@ -241,7 +268,7 @@ class Solution(object):
             return self.deleteDuplicates(head.next)
         else:
             head.next = self.deleteDuplicates(head.next)
-        return head
+            return head
         
 
 # 19. 删除链表的倒数第N个节点
@@ -314,40 +341,22 @@ class Solution(object):
 #         self.val = x
 #         self.next = None
 
-class Solution(object):
-    
-    count = 0
-    sum = 0
-    
+class Solution:
+    s = ''
     def addTwoNumbers(self, l1, l2):
-        """
-        :type l1: ListNode
-        :type l2: ListNode
-        :rtype: ListNode
-        """
-        
         def F(head):
-            if not head:
-                return 
+            if not head: return
             F(head.next)
-            self.count += 1 # 运用递归的倒序
-            self.sum += head.val * (10 ** (self.count - 1))
+            self.s = str(head.val) + self.s # 类似于树的后序遍历
         
-        self.count, self.sum = 0, 0
-        F(l1)
-        s1 = self.sum
+        self.s = ''; F(l1); n1 = int(self.s)
+        self.s = ''; F(l2); n2 = int(self.s)
         
-        self.count, self.sum = 0, 0
-        F(l2)
-        s2 = self.sum
-        
-        s = str(s1 + s2)
-        
-        head = p = ListNode(int(s[0]))
-        for i in range(1, len(s)):
-            p.next = ListNode(int(s[i]))
+        p = head = ListNode(-1)
+        for char in str(n1 + n2):
+            p.next = ListNode(int(char))
             p = p.next
-        return head
+        return head.next
     
 
         
@@ -363,11 +372,8 @@ class Solution(object):
         
         # 反转操作，以a为头结点
         def reverse(a, b): 
-            if a == b:
-                return a
-            
-            if a.next == b:
-                return a
+            if a == b: return a
+            if a.next == b: return a
             last = reverse(a.next, b)
             a.next.next = a
             a.next = b
@@ -429,6 +435,42 @@ class Solution:
         p1.next = head2.next
         p2.next = None
         return head1.next
+
+# 143. 重排链表
+class Solution:
+    def reorderList(self, head):
+        """
+        Do not return anything, modify head in-place instead.
+        """
+
+        def middleNode(head):
+            slow = fast = head
+            while fast and fast.next: slow, fast = slow.next, fast.next.next
+            return slow
+
+        def reverse(head):
+            if not head or not head.next: return head
+            last = reverse(head.next)
+            head.next.next = head
+            head.next = None
+            return last
+        
+        def merge(left, right):
+            p1, p2 = left, right
+            while p1 and p2:
+                t1, t2 = p1.next, p2.next
+                p1.next = p2
+                p2.next = t1
+                p1, p2 = t1, t2
+
+        if not head:
+            return None
+        middle = middleNode(head)
+        l2 = middle.next
+        l1 = head
+        middle.next = None
+        l2 = reverse(l2)
+        merge(l1,l2)
 
 
 class Solution(object):
