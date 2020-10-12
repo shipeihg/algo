@@ -567,4 +567,139 @@ def find_pairs(arr, k):
             min_val = val
     return ans
         
+
+class Node:
+    def __init__(self):
+        self.next = {}
+        self.term = None
+
+class Trie:
+    def __init__(self):
+        self.root = Node()
+    
+    def insert(self, word):
+        p = self.root
+        for char in word:
+            if char not in p.next:
+                p.next[char] = Node()
+            p = p.next[char]
+        p.term = word
+    
+    def match(self, word):
+        p = self.root
+        for char in word:
+            if char in p.next: p = p.next
+            else: return False
+        return True
+
+# # 677. 键值映射
+# class Node(object):
+#     def __init__(self):
+#         self.next = {}
+#         self.val = 0
+#         self.isEnd = False
         
+# class MapSum(object):
+#     sum = 0
+#     def __init__(self):
+#         """
+#         Initialize your data structure here.
+#         """
+#         self.root = Node()
+
+#     def insert(self, key, val):
+#         """
+#         :type key: str
+#         :type val: int
+#         :rtype: None
+#         """
+#         p = self.root
+#         for char in key:
+#             if char not in p.next:
+#                 p.next[char] = Node()
+#             p = p.next[char]
+#         p.isEnd = True
+#         p.val = val
+
+#     def sum(self, prefix):
+#         """
+#         :type prefix: str
+#         :rtype: int
+#         """
+#         p = self.root
+#         for char in prefix[:-1]:
+#             if char not in p.next:
+#                 return 0
+#             else:
+#                 p = p.next[char]
+#         if p.val != prefix[-1]: return 0
+        
+#         root = p
+#         self.s = 0
+#         def F(root):
+#             if root.isEnd: return 0
+#             for node in root.next:
+#                 if node:
+#                     self.s += node.val
+#                 F(node)
+#         F(root)
+#         return self.s
+        
+        
+# # 239. 滑动窗口最大值   
+
+# from collections import deque
+
+# class Q:
+#     def __init__(self, ksize):
+#         self.x = deque(maxlen=ksize)  
+    
+#     def push(self, n):
+#         while self.x and n > self.x[-1]:
+#             self.x.pop()
+#         self.x.append(n)      
+    
+#     def max(self):
+#         if self.x: return self.x[0]
+    
+#     def popleft(self, n):
+#         if self.x and n == self.x[0]: 
+#             self.x.popleft()
+        
+        
+# class Solution(object):
+#     def maxSlidingWindow(self, nums, k):
+#         """
+#         :type nums: List[int]
+#         :type k: int
+#         :rtype: List[int]
+#         """
+#         r = []
+#         q = Q(ksize=k)
+#         for i, n in enumerate(nums):
+#             q.push(n)
+#             if i >= k - 1:
+#                 r.append(q.max())
+#                 q.popleft(nums[i-k+1])
+#         return r
+           
+        
+# class Solution(object):
+#     def isIsomorphic(self, s, t):
+#         """
+#         :type s: str
+#         :type t: str
+#         :rtype: bool
+#         """
+        
+#         if len(s) != len(t): return False
+#         c = {}
+#         d = {}
+#         for (x,y) in zip(s,t):
+#             if x not in d:
+#                 d[x] = y
+#             if y not in c:
+#                 c[y] = x
+#             if x in d and d[x] != y: return False
+#             if y in c and c[y] != x: return False   
+#         return True

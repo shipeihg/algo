@@ -133,8 +133,7 @@ class Solution(object):
         :type n: int
         :rtype: ListNode
         """
-        if m == 1:
-            return self.reverseTopN(head, n)
+        if m == 1: return self.reverseTopN(head, n)
         head.next = self.reverseBetween(head.next, m-1, n-1)
         return head
     

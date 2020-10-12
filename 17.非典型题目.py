@@ -12,6 +12,21 @@ class Solution:
             if dp[i] == 5*dp[c]: c += 1
         return dp[-1]
 
+# 只有两个键的键盘（650）
+class Solution(object):
+    def minSteps(self, n):
+        """
+        :type n: int
+        :rtype: int
+        """
+        def F(n):
+            if n == 1: return 0
+            for i in range(int(n/2), 1, -1):
+                if n % i == 0: return F(i) + n / i
+            return n
+        return F(n)
+    
+
 #547. 朋友圈 (DFS)
 class Solution(object):
     def findCircleNum(self, M):
@@ -42,3 +57,9 @@ class Solution(object):
             if ans[-1][1] < intervals[i][0]: ans.append(intervals[i])
             else: ans[-1][1] = max(ans[-1][1], intervals[i][1])
         return ans
+
+
+# 折纸问题
+def fold(n):
+    if n == 1: return '1'
+    else: return fold(n-1) + '1' + ''.join(map(lambda c: str(1-int(c)), fold(n-1)))[::-1]

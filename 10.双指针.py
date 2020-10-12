@@ -56,7 +56,7 @@ class Solution(object):
         while fast < len(nums):
             if nums[fast] != 0:
                 nums[slow], nums[fast] = nums[fast], nums[slow]
-                slow += 1 # slow之前都是非0的
+                slow += 1 # slow之前的元素都是满足条件的，即都是是非0的
             fast += 1
     
 # 分发饼干

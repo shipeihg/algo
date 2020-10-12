@@ -99,6 +99,31 @@ class Solution:
                     dp[i][j] = 1 + dp[i-1][j-1]
                     lcs = max(lcs, dp[i][j])
         return lcs
+
+# 求最长公共子序列LCS的具体子序列
+class Solution:
+    def LCS(s1, s2):
+        # 计算LCS的长度
+        n = len(s1)
+        m = len(s2)
+        dp = [[0]*(m+1) for _ in range(n+1)]
+        for i in range(1, n+1):
+            for j in range(1, m+1):
+                if s1[i-1] == s2[j-1]: dp[i][j] = dp[i-1][j-1] + 1
+                else: dp[i][j] = max(dp[i-1][j], dp[i][j-1])
+        
+        if dp[-1][-1] == 0: return -1
+        i, j = n, m; s = ''
+        while i > 0 and j > 0:
+            if s1[i-1] == s2[j-1]:
+                s = s2[j-1] + s
+                i -= 1
+                j -= 1
+                continue
+            else:
+                if dp[i][j-1] >= dp[i-1][j]: j -= 1
+                else: i -= 1
+        return s
     
 # 最长上升子序列
 class Solution(object):
@@ -571,20 +596,6 @@ class Solution(object):
             dp_1 = max(dp_1, dp_0 - fee - prices[i])
         return dp_0
 
-
-class Solution(object):
-    def minSteps(self, n):
-        """
-        :type n: int
-        :rtype: int
-        """
-        def F(n):
-            if n == 1:
-                return 0
-            for i in range(int(n/2), 1, -1):
-                if n % i == 0: return F(i) + n / i
-            return n
-        return F(n)
             
 
 # 583 编辑距离            
