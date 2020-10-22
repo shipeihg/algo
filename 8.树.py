@@ -565,3 +565,42 @@ class Trie(object):
         else:
             return True
 
+# Trie
+class Node(object):
+    def __init__(self):
+        self.term = None 
+        self.next = {}
+
+
+class Trie(object):
+    def __init__(self, terms=[]):
+        self.root = Node()
+        for term in terms:
+            self.add(term)
+
+    def add(self, term):
+        node = self.root
+        for char in term:
+            if not char in node.next:
+                node.next[char] = Node()
+            node = node.next[char]
+        node.term = term
+
+    def match(self, query):
+        result = []
+        for i in xrange(len(query)):
+            node = self.root
+            for j in xrange(i, len(query)):
+                node = node.next.get(query[j])
+                if not node:
+                    break
+                if node.term:
+                    result.append(node.term)
+        return result
+
+    def delete(self, key):
+        node = self.root
+        if self.match(key):
+            for c in key:
+                node = node.next[c]
+            node.term = None

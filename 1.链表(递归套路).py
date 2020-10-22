@@ -47,11 +47,6 @@ class Solution(object):
         return fast
 
 # 206. 反转链表
-class ListNode(object):
-    def __init__(self, x):
-        self.val = x
-        self.next = None
-
 # class Solution(object):
 #     def reverseList(self, head):
 #         """
@@ -88,36 +83,21 @@ class Solution(object):
 # 反转链表的前 n 个节点
 class Solution(object):
     def reverseN(self, head, n):
-        
-        if not head:
-            return None
-        
+        if not head or not head.next: return None
         if n == 1:
             con = head.next
             return head
-        
-        last = self.reverseN(head.next, n - 1)
-        
+        last = self.reverseN(head.next, n - 1) # 问题规模减小的方向
         head.next.next = head
         head.next = con
-        
         return last
 
 
 # 92. 反转链表 II
-# Definition for singly-linked list.
-# class ListNode(object):
-#     def __init__(self, x):
-#         self.val = x
-#         self.next = None
-
 class Solution(object):
-    
     con = None
-    
     def reverseTopN(self, head, n):
-            if not head:
-                return None
+            if not head: return None
             if n == 1:
                 self.con = head.next
                 return head
@@ -136,32 +116,12 @@ class Solution(object):
         if m == 1: return self.reverseTopN(head, n)
         head.next = self.reverseBetween(head.next, m-1, n-1)
         return head
-    
-
-# 反转a、b之间的节点,其中a是头结点
-class Solution:
-    con = None
-    def reverseBetweenAB(self, a, b):
-        if a == b:
-            self.con = a.next
-            return a
-        last = self.reverseBetweenAB(a.next, b)
-        a.next.next = a
-        a.next = self.con
-        return last
         
 
 # 25. K 个一组翻转链表   
-# Definition for singly-linked list.
-# class ListNode(object):
-#     def __init__(self, x):
-#         self.val = x
-#         self.next = None
-
 class Solution(object):
-    
     con = None
-    
+    # 反转a、b之间的节点,其中a是头结点
     def reverseBetween(self, a, b):
         
         # 迭代法
@@ -176,7 +136,7 @@ class Solution(object):
         
         # 递归法
         if a.next == b:
-            self.con = a.next
+            self.con = b
             return a
         last = self.reverseBetween(a.next, b)
         a.next.next = a
@@ -189,15 +149,10 @@ class Solution(object):
         :type k: int
         :rtype: ListNode
         """
-
-        if not head: 
-            return None
-        
+        if not head:  return None
         a = b = head
-        
         for _ in range(k):
-            if not b:
-                return head
+            if not b: return head
             b = b.next
         
         new_head = self.reverseBetween(a, b)
@@ -207,12 +162,6 @@ class Solution(object):
     
     
 # 21. 合并两个有序链表   
-# Definition for singly-linked list.
-# class ListNode(object):
-#     def __init__(self, x):
-#         self.val = x
-#         self.next = None
-
 class Solution(object):
     def mergeTwoLists(self, l1, l2):
         """
@@ -220,22 +169,16 @@ class Solution(object):
         :type l2: ListNode
         :rtype: ListNode
         """
-        
         a, b = l1, l2
+        if not a:  return b
+        if not b: return a
         
-        if not a: 
-            return b
-        if not b:
-            return a
-        
-        if a.val <= b.val: 
+        if a.val < b.val: 
             a.next = self.mergeTwoLists(a.next, b) # 指向下一个最小值
             return a # 谁的值小，谁就作为头儿返回
         else:
             b.next = self.mergeTwoLists(a, b.next)
             return b
-        
-    
     
 # 83. 删除排序链表中的重复元素    
 # Definition for singly-linked list.
@@ -271,12 +214,6 @@ class Solution(object):
         
 
 # 19. 删除链表的倒数第N个节点
-# Definition for singly-linked list.
-# class ListNode(object):
-#     def __init__(self, x):
-#         self.val = x
-#         self.next = None
-
 class Solution(object):
     
     """
@@ -298,48 +235,30 @@ class Solution(object):
         :rtype: ListNode
         """
         
-        if not head:
-            return None
+        if not head: return None
         
         head.next = self.removeNthFromEnd(head.next, n)
         self.count += 1
         
-        if n == self.count:
-            return head.next # 此时的节点为待删除节点，返回其next节点跨过待删除节点，达到删除节点的目的
-        else:
-            return head # 其他情况下正常返回本节点
+        if n == self.count: return head.next # 此时的节点为待删除节点，返回其next节点跨过待删除节点，达到删除节点的目的
+        else: return head # 其他情况下正常返回本节点
 
 
 # 24. 两两交换链表中的节点
-# Definition for singly-linked list.
-# class ListNode(object):
-#     def __init__(self, x):
-#         self.val = x
-#         self.next = None
-
 class Solution(object):
     def swapPairs(self, head):
         """
         :type head: ListNode
         :rtype: ListNode
         """
-        
-        if not head or not head.next:
-            return head
-        
+        if not head or not head.next: return head
         a, b = head, head.next
-        a.next = self.swapPairs(a.next.next)
+        a.next = self.swapPairs(b.next)
         b.next = a
         return b
     
 
 # 445. 两数相加 II  
-# Definition for singly-linked list.
-# class ListNode(object):
-#     def __init__(self, x):
-#         self.val = x
-#         self.next = None
-
 class Solution:
     s = ''
     def addTwoNumbers(self, l1, l2):
@@ -382,12 +301,10 @@ class Solution(object):
         p = reverse(head, slow)
         
         # 若fast不是None，说明链表数字是奇数个
-        if fast:
-            slow = slow.next
+        if fast: slow = slow.next
         
         while slow:
-            if p.val != slow.val:
-                return False
+            if p.val != slow.val: return False
             slow = slow.next; p = p.next
         return True
 
@@ -436,6 +353,8 @@ class Solution:
         return head1.next
 
 # 143. 重排链表
+# https://leetcode-cn.com/problems/reorder-list/solution/zhao-dao-zhong-dian-fan-zhuan-hou-xu-lian-biao-zho/
+# 遍历直到，从头开始的链表，和从尾开始的链表都到达了终点。
 class Solution:
     def reorderList(self, head):
         """
@@ -464,12 +383,12 @@ class Solution:
 
         if not head:
             return None
-        middle = middleNode(head)
-        l2 = middle.next
-        l1 = head
-        middle.next = None
-        l2 = reverse(l2)
-        merge(l1,l2)
+        middle = middleNode(head) # 找中点
+        l2 = middle.next # 第二个链表开始
+        l1 = head # 第一个链表开始
+        middle.next = None # 第一个链表结束
+        l2 = reverse(l2) # 翻转第二个
+        merge(l1,l2) # 错位合并
 
 
 class Solution(object):

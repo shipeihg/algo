@@ -52,9 +52,7 @@ class Solution:
 # 46. 全排列
 class Solution(object):
     def permute(self, nums):
-        if not nums:
-            return []
-        
+        if not nums: return []
         r = []
         def F(path):
             if len(path) == len(nums):

@@ -9,6 +9,8 @@ https://leetcode-cn.com/problems/top-k-frequent-elements/solution/python-dui-pai
 
 
 # 215. 数组中的第K个最大元素
+# 维护一个小根堆
+# https://leetcode-cn.com/problems/top-k-frequent-elements/solution/pythonti-jie-xiao-gen-dui-by-xiao-xue-66/
 class Solution(object):
     def findKthLargest(self, nums, k):
         """
@@ -16,26 +18,27 @@ class Solution(object):
         :type k: int
         :rtype: int
         """
-        
-        def down(start, end):
-            if 2 * start + 1 <= end:
-                maxChild = 2*start+2 if 2*start+2<=end and nums[2*start+2]>nums[2*start+1] else 2*start+1
-                if nums[start] < nums[maxChild]:
-                    nums[start], nums[maxChild] = nums[maxChild], nums[start]
-                    down(maxChild, end)
-        
-        # 建最大堆
-        for i in range(len(nums)//2-1, -1, -1):
-            down(i, len(nums)-1)
-        print '建堆后数组：', nums
-        # 把堆顶也就是最大值删除并对剩下的元素重新堆排序
-        for i in range(1, k+1):
-            ret = nums[0]
-            nums[0], nums[-i] = nums[-i], nums[0]
-            down(0, len(nums)-1-i)            
-            print '第{}次排序：'.format(i), nums
+    # 注意一下，这里的堆就是用数组表示的
+    # 递归调整最小堆，让父节点始终小于子节点的最小值，否则就递归 
+    def minHeapSink(nums, start, end):
+        if 2*start + 1 <= end:
+        minChild = 2*start+2 if 2*start+2<=end and nums[2*start+2]<nums[2*start+1] else 2*start+1
+        if nums[start] > nums[minChild]:
+            nums[start], nums[minChild] = nums[minChild], nums[start]
+            minHeapSink(nums, minChild, end) # 递归
 
-        return ret
+    # 用于初始化最小堆的函数，注意从中间开始
+    def heapSort(arr):
+        for i in range(len(arr)>>1, -1, -1):
+            minHeapSink(arr, i, len(arr)-1)
+
+    ans = nums[:k] # 首先确定最小堆的尺寸
+    heapSort(ans) # 建立最小堆
+    for num in nums[k:]:
+        if num > ans[0]: # 如果一旦当前数字大于堆顶元素，则删除堆顶，吧当前加入堆里调整
+            ans[0] = num
+            minHeapSink(ans, 0, k-1)
+    return ans[0] # 返回堆顶元素
 
 s = Solution()
 print s.findKthLargest([1,10,2,5,4,7,0], 6)

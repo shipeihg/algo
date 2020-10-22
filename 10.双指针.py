@@ -26,6 +26,19 @@ class Solution(object):
                 else: right -= 1
         return ans
 
+
+# 剑指offer: 将数组分为两部分，一半是可以被2整除，一半不可以，空间复杂度O(1)   (对撞指针)  
+class Solution:
+    def splitArray(self, nums):
+        i, j = 0, len(nums)-1
+        while i < j:
+            while i < len(nums) and nums[i] & 1 == 1: i += 1
+            while j >= 0 and nums[j] & 1 == 0: j -= 1
+            if i < j:
+                nums[i], nums[j] = nums[j], nums[i]
+                i += 1
+                j -= 1
+
 # 27. 移除元素(快慢指针原地操作)
 #https://leetcode-cn.com/problems/remove-element/solution/python-shuang-zhi-zhen-da-fa-hao-a-quan-guo-zui-ca/
 class Solution(object):
@@ -90,8 +103,6 @@ class Solution(object):
                 ans.append(a[i])
                 i += 1
                 j += 1
-            elif a[i] > b[j]:
-                j += 1
-            else: 
-                i += 1
+            elif a[i] > b[j]: j += 1
+            else: i += 1
         return ans

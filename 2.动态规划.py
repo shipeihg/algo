@@ -8,9 +8,7 @@ https://leetcode-cn.com/problems/combination-sum-iv/solution/xi-wang-yong-yi-cho
 # 70. 爬楼梯
 class Solution(object):
     def climbStairs(self, n):
-        if n == 0 or n == 1:
-            return 1
-        
+        if n == 0 or n == 1:return 1
         pre, cur = 1, 1
         for _ in range(2, n+1):
             pre, cur = cur, pre + cur
@@ -19,9 +17,7 @@ class Solution(object):
 # 198. 打家劫舍
 class Solution(object):
     def rob(self, nums):
-        
        # F(n) = max(A[n] + F(n-2), F(n-1))
-       
        pre, cur = 0, 0
        for num in nums:
            pre, cur = cur, max(cur, pre + num)
@@ -43,7 +39,6 @@ class Solution(object):
     
 # 413. 等差数列划分
 # https://leetcode-cn.com/problems/arithmetic-slices/solution/chang-yong-tao-lu-jie-jue-dong-tai-gui-hua-by-lu-c/
-
 class Solution(object):
     def numberOfArithmeticSlices(self, A):
         dp = [0] * len(A)
@@ -54,7 +49,6 @@ class Solution(object):
 
 
 class Solution(object):
-    
     memo = {}
     def rob(self, root):
         if not root: return 0
@@ -148,7 +142,6 @@ class Solution(object):
         :type pairs: List[List[int]]
         :rtype: int
         """
-        
         A = pairs
         A.sort(key=lambda x: x[1])
         
@@ -183,6 +176,13 @@ class Solution:
                 premax += n
             ma = max(premax, ma)
         return ma
+
+# 牛客 子数组累加最大和(原地修改)
+class Solution:
+    def maxsumofSubarray(self , arr ):
+        for i in range(1, len(arr)):
+            arr[i] += max(0, arr[i-1])
+        return max(arr)
 
 # 最长摆动子序列
 class Solution(object):
@@ -402,9 +402,8 @@ class Solution(object):
         dp = [True] + [False] * target # dp[0]=True; 因为背包容量是0，任何物品都可以满足，不用装
         
         for num in nums:
-            for j in range(len(dp), -1, -1):
-                if j >= num:
-                    dp[j] = dp[j] or dp[j - num] # (放 or 不放)
+            for j in range(len(dp), num-1, -1):
+                dp[j] = dp[j] or dp[j - num] # (放 or 不放)
         return dp[-1]
     
     
@@ -512,11 +511,9 @@ class Solution(object):
             dp_0 = max(dp_0, dp_1 + prices[i])
             dp_1 = max(dp_1, dp_pre_0 - prices[i])
             dp_pre_0 = tmp
-
         return dp_0
     
 
-        
 # 714. 买卖股票有费用的 k = +infinity with fee   
 class Solution(object):
     def maxProfit_with_fee(self, prices, fee):

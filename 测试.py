@@ -703,3 +703,12 @@ class Trie:
 #             if x in d and d[x] != y: return False
 #             if y in c and c[y] != x: return False   
 #         return True
+
+
+def F(words, text):
+    words = set(words):
+    for i in range(len(words)):
+        for j in range(i+4, i, -1):
+            if text[i:j] in words:
+                ans.append((i,j))
+                break

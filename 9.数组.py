@@ -10,17 +10,8 @@ class Solution:
             if num == x: votes += 1
             else: votes -= 1
         return x
-    
-    
-            
-
-# 将数组分为两部分，一半是可以被2整除，一半不可以，空间复杂度O(1)     
-class Solution:
-    def splitArray(self, nums):
-        pass
 
         
-    
 # 485. 最大连续1的个数
 class Solution(object):
     def findMaxConsecutiveOnes(self, nums):
@@ -28,20 +19,10 @@ class Solution(object):
         :type nums: List[int]
         :rtype: int
         """
-        
-        # from itertools import groupby
-        # maxLen = 0
-        # for k,g in groupby(nums):
-        #     if k == 1:
-        #         maxLen = max(maxLen, len(list(g)))
-        # return maxLen
-        
         maxOnes = curOnes = 0
         for n in nums:
-            if n == 0:
-                curOnes = 0
-            else:
-                curOnes += 1
+            if n == 0: curOnes = 0
+            else: curOnes += 1
             maxOnes = max(maxOnes, curOnes)
         return maxOnes
     
@@ -72,37 +53,6 @@ class Solution(object):
             elif matrix[i][j] > target: i -= 1
             else: j += 1
         return False
-
-
-# 378. 有序矩阵中第K小的元素
-class Solution(object):
-    def kthSmallest(self, matrix, k):
-        """
-        :type matrix: List[List[int]]
-        :type k: int
-        :rtype: int
-        """
-        
-        m, n = len(matrix), len(matrix[0])
-        lo, hi = matrix[0][0], matrix[-1][-1]
-        while lo < hi:
-            mid = (lo + hi) >> 1
-            cnt = sum(matrix[i][j]<=mid for i in range(m) for j in range(n))
-            if cnt < k: lo = mid + 1 
-            else: hi = mid
-        return lo
-    
-    # def countLessThanMid(self, matrix, mid):
-    #     i, j = len(matrix) - 1, 0
-    #     cnt = 0
-    #     while i >=0 and j < len(matrix[0]):
-    #         if matrix[i][j] <= mid: 
-    #             j += 1
-    #             cnt += 1 + i
-    #         else:
-    #             i -= 1
-    #     return cnt
-
 
 
 # 59. 螺旋矩阵II
@@ -162,7 +112,6 @@ class Solution(object):
         :type matrix: List[List[int]]
         :rtype: bool
         """
-
         m, n = len(matrix), len(matrix[0])
         return all(matrix[i][j]==matrix[i-1][j-1] for i in range(1,m) for j in range(1,n))
   

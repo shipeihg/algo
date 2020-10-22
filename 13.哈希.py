@@ -53,3 +53,6 @@ class Solution(object):
             ret += preSum.get(sm-k, 0)
             preSum[sm] = preSum.get(sm, 0) + 1
         return ret
+
+
+# 670 最大交换(头条问的)
