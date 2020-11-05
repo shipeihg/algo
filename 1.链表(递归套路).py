@@ -265,7 +265,7 @@ class Solution:
         def F(head):
             if not head: return
             F(head.next)
-            self.s = str(head.val) + self.s # 类似于树的后序遍历
+            self.s = str(head.val) + self.s 
         
         self.s = ''; F(l1); n1 = int(self.s)
         self.s = ''; F(l2); n2 = int(self.s)

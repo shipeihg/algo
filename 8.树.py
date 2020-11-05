@@ -247,7 +247,6 @@ class Solution(object):
         do = root.val
         if root.left: do += self.rob(root.left.left) + self.rob(root.left.right)
         if root.right: do += self.rob(root.right.left) + self.rob(root.right.right)
-        
         not_do = self.rob(root.left) + self.rob(root.right)
         
         return max(do, not_do)

@@ -279,7 +279,6 @@ class Solution(object):
                     return 1
                 else:
                     return 0
-            
             return F(x + nums[start], start+1) + F(x - nums[start], start + 1)
 
 
@@ -410,7 +409,6 @@ class Solution(object):
 # # 474. 一和零 (0-1背包的多为问题，整理思路，3维数组，正序，非最优解)
 # class Solution:
 #     # https://leetcode-cn.com/problems/ones-and-zeroes/solution/dong-tai-gui-hua-zhuan-huan-wei-0-1-bei-bao-wen-ti/
-    
 #     def findMaxForm(self, strs, m, n):
 #         import numpy as np
 #         l = len(strs)
@@ -537,7 +535,7 @@ class Solution(object):
         dp = np.zeros((L, K+1, 2)).tolist()
         
         for i in range(L):
-            for k in range(K, 0, -1):
+            for k in range(1， K):
                 if i == 0:
                     dp[0][k][0] = 0
                     dp[0][k][1] = -prices[i]
