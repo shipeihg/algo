@@ -11,6 +11,8 @@
 
 # 一篇文章解决所有二叉树路径问题（问题分析+分类模板+题目剖析）
 # https://leetcode.cn/problems/path-sum-ii/solution/yi-pian-wen-zhang-jie-jue-suo-you-er-cha-oo63/
+# 更简洁的路径模板
+#https://leetcode.cn/problems/path-sum-ii/solution/tao-mo-ban-er-cha-shu-wen-ti-de-dfs-he-bfs-jie-fa-/
 
 
 class Solution(object):    
