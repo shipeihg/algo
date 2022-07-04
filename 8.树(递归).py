@@ -260,6 +260,8 @@ class Solution(object):
 
 
 # 671. 二叉树中第二小的节点
+# 优秀解法：https://leetcode.cn/problems/second-minimum-node-in-a-binary-tree/solution/gong-shui-san-xie-yi-ti-shuang-jie-shu-d-eupu/
+# 普通解法
 class Solution(object):
     def findSecondMinimumValue(self, root):
         """
@@ -274,7 +276,6 @@ class Solution(object):
         if left == -1: return right
         if right == -1: return left
         return min(left, right)
-        
 
 
 # 669. 修剪二叉搜索树

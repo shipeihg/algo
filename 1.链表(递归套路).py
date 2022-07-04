@@ -7,6 +7,7 @@ class ListNode(object):
         self.val = x
         self.next = None
 
+
 class Solution(object):
     def getIntersectionNode(self, headA, headB):
         """
@@ -18,7 +19,8 @@ class Solution(object):
             pa = pa.next if pa else headB
             pb = pb.next if pb else headA
         return pa
-    
+
+
 # 141. 环形链表 
 class Solution:
     def hasCycle(self , head ):
@@ -45,6 +47,7 @@ class Solution(object):
         while fast != slow:
             fast, slow = fast.next, slow.next
         return fast
+
 
 # 206. 反转链表
 # class Solution(object):
@@ -199,6 +202,7 @@ class Solution(object):
         # 第一步应该先考虑 return 的结果，这里要分情况讨论
         if head.val == head.next.val: return head.next
         else: return head
+
 
 # 82 删除排序链表中的重复元素 II
 class Solution(object):

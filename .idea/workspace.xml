@@ -3,7 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="3c90c6a5-2c7b-410d-bcb0-7263173b502a" name="Default Changelist" comment="二叉树路径模板">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/8.树.py" beforeDir="false" afterPath="$PROJECT_DIR$/8.树.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/1.链表(递归套路).py" beforeDir="false" afterPath="$PROJECT_DIR$/1.链表(递归套路).py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/7.DFS.py" beforeDir="false" afterPath="$PROJECT_DIR$/7.DFS(递归套路).py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/8.树.py" beforeDir="false" afterPath="$PROJECT_DIR$/8.树(递归).py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -66,7 +68,14 @@
       <option name="project" value="LOCAL" />
       <updated>1656403464597</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="二叉树路径模板">
+      <created>1656420304092</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1656420304092</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="ToolWindowManager">
