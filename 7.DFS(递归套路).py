@@ -124,8 +124,6 @@ class Solution(object):
         
         # 题解
         # https://leetcode-cn.com/problems/number-of-closed-islands/solution/dian-xing-dao-yu-ti-dfsjie-ti-xi-jie-by-happyfire/
-        
-        
         # 返回的是一个bool值；若是陆地，则消消乐，"顺便"看下当前坐标所连接的陆地是否和边界有接触
         def touch(x, y):
             if not (0 <= x < len(grid) and 0 <= y < len(grid[0])): return True

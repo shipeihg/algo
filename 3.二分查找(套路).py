@@ -1,4 +1,8 @@
 # 二分总结模板
+# 有了这套模板，女朋友再也不用担心我刷不动 LeetCode 了
+# http://www.shangdixinxi.com/detail-1104691.html
+# https://zhuanlan.zhihu.com/p/86136802
+
 # https://leetcode-cn.com/problems/search-insert-position/solution/te-bie-hao-yong-de-er-fen-cha-fa-fa-mo-ban-python-/
 
 

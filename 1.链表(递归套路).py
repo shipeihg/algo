@@ -66,7 +66,7 @@ class Solution(object):
 #             cur = t
 #         return pre
 
-
+# 206
 class Solution(object):
     def reverseList(self, head):
         """
@@ -173,7 +173,7 @@ class Solution(object):
         :rtype: ListNode
         """
         a, b = l1, l2
-        if not a:  return b
+        if not a: return b
         if not b: return a
         
         if a.val < b.val: 
