@@ -10,6 +10,9 @@ https://leetcode-cn.com/problems/permutations/solution/hui-su-suan-fa-by-powcai-
 回溯算法套路
 回溯算法一般是用来返回排列组合的结果的，这一点切记！
 
+
+一句话总结：在当前状态下，遍历所有接下来的分支！！！！
+
 1.永远记住俩个要素：【路径 + 选择】(理解为：当前的路径+剩余的选择)
 2.若数组里有重复项，记得先排序
 3.若结果中要求不能含有重复项，记得递归中用 if path not in res 来排除，虽然线性复杂度，但是好理解
@@ -271,7 +274,6 @@ class Solution(object):
         def F(depth=0):
             if depth == len(empty):
                 return True
-            
             i, j = empty[depth]           
             k = (i//3)*3 + j//3
             for val in rows[i] & cols[j] & blocks[k]: # 层遍历树的当前深度的所有节点；在(i,j)位置下可供选择的数字
