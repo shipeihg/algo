@@ -320,30 +320,31 @@ class Solution(object):
       
                 
 # 79. 单词搜索            
-class Solution(object):
-    def exist(self, board, word):
-        """
-        :type board: List[List[str]]
-        :type word: str
-        :rtype: bool
-        """
-        if not board or not board[0]: return False
-        m, n = len(board), len(board[0])
-        
-        def F(x,y,index): 
-            if board[x][y] != word[index]: return False
-            if index == len(word)-1: return True
-            tmp = board[x][y]; board[x][y] = '#'
+class Solution:
+    def exist(self, board: List[List[str]], word: str) -> bool:
+        if not board or not board[0]:
+            return False
+        A = board
+        m, n = len(A), len(A[0])
+
+        def backtrack(i, j, index):
+            if A[i][j] != word[index]: return False
+            if index == len(word) - 1: return True
+            tmp = A[i][j]
+            A[i][j] = 0
             b = False
-            for (xx,yy) in [(x-1,y), (x+1,y), (x,y-1), (x,y+1)]:
-                if 0<=xx<m and 0<=yy<n:
-                    b = b or F(xx,yy,1+index)
-            if b: return True
-            else: board[x][y] = tmp; return False
-        
-        for x in range(m):
-            for y in range(n):
-                if F(x,y,0):
+            for (ii, jj) in [(i - 1, j), (i + 1, j), (i, j + 1), (i, j - 1)]:
+                if 0 <= ii < m and 0 <= jj < n:
+                    b = b or backtrack(ii, jj, 1 + index)
+            A[i][j] = tmp
+            if b:
+                return True
+            else:
+                return False
+
+        for i in range(m):
+            for j in range(n):
+                if backtrack(i, j, 0):
                     return True
         return False
 

@@ -6,6 +6,34 @@
 # https://leetcode-cn.com/problems/search-insert-position/solution/te-bie-hao-yong-de-er-fen-cha-fa-fa-mo-ban-python-/
 
 
+# 153. 寻找旋转排序数组中的最小值
+class Solution:
+    def findMin(self, nums: List[int]) -> int:
+        left, right = 0, len(nums) - 1
+        while left < right:
+            mid = (left + right) >> 1
+            if nums[mid] > nums[-1]: # 这里-1替换为right是ac通过
+                left = mid + 1
+            else:
+                right = mid
+        return nums[left]
+
+
+# 540. Single Element in a Sorted Array (Medium)
+class Solution:
+    def singleNonDuplicate(self, nums: List[int]) -> int:
+        left, right = 0, len(nums) - 1
+        while left < right:
+            mid = (left + right) >> 1
+            if mid % 2 == 1:
+                mid -= 1 # 始终保持m为偶数，single之前，必然满足m是偶数&&nums[i]==nums[i+1]
+            if nums[mid] == nums[mid + 1]:
+                left = mid + 2
+            else:
+                right = mid
+        return nums[left]
+
+
 
 # 34. 在排序数组中查找元素的第一个和最后一个位置
 # https://leetcode-cn.com/problems/find-first-and-last-position-of-element-in-sorted-array/solution/si-lu-hen-jian-dan-xi-jie-fei-mo-gui-de-er-fen-cha/
@@ -16,7 +44,7 @@ class Solution:
             m = (i + j) >> 1
             if a[m] < k: i = m + 1
             else: j = m
-        return i if a[i]==k else -1
+        return i if a[i]==k else -1 # 提前判断数组中不存在target的情况
     
     def searchRight(self, a, k):
         i, j = 0, len(a)-1
@@ -33,7 +61,7 @@ class Solution:
         return [left, right]
 
 
-# 寻找旋转排序数组中的最小值 II
+# 154. 寻找旋转排序数组中的最小值 II
 class Solution(object):
     def findMin(self, nums):
         """
@@ -50,20 +78,18 @@ class Solution(object):
 
 
 # 287. 寻找重复数
-class Solution(object):
-    def findDuplicate(self, nums):
-        """
-        :type nums: List[int]
-        :rtype: int
-        """
-
-        i,j = 0, len(nums)-1
-        while i<j:
-            m = (i+j) >> 1
-            cnt = sum(num <= m for num in nums)
-            if cnt <= m: i = m + 1
-            else: j = m
-        return i
+class Solution:
+    def findDuplicate(self, nums: List[int]) -> int:
+        left = 1
+        right = len(nums) - 1 # 在[1, n]范围内寻找目标值
+        while left < right:
+            mid = (left + right) >> 1
+            cnt = sum(num <= mid for num in nums)
+            if cnt <= mid:
+                left = mid + 1
+            else:
+                right = mid
+        return left
 
 
 # 378. 有序矩阵中第K小的元素
