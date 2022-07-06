@@ -38,9 +38,9 @@ class Solution(object):
         ret = ''
         
         while j < len(s):
-            lookup[s[j]] += 1
+            lookup[s[j]] += 1 #lookup字典在不断累计字符
             j += 1
-            while all(map(lambda x: lookup[x] >= t[x], t.keys())):
+            while all(map(lambda x: lookup[x] >= t[x], t.keys())): # 当lookup字典包含了所有短短串的字符，并且其数量>=t，开始缩小窗口
                 # 找最小就放到内层循环
                 if j - i < min_len:
                     ret = s[i:j]
@@ -227,6 +227,10 @@ class Solution(object):
         :type A: List[int]
         :type K: int
         :rtype: int
+        """
+
+        """
+        需要快速抽象问题，最大1个个数，取决于将0->1的个数
         """
         
         i = j = 0
