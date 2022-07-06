@@ -3,6 +3,16 @@
 # http://www.shangdixinxi.com/detail-1104691.html
 # https://zhuanlan.zhihu.com/p/86136802
 
+"""
+while left < right:
+    mid = (left + right) >> 1 或者 mid = (left + right + 1) >> 1，这里有两个选择，是因为取中点时有两种可能：左中位点和右中位点
+    if 根据左右中位点排除一半区间：
+        xxx
+    else:
+        xxxx
+
+"""
+
 # https://leetcode-cn.com/problems/search-insert-position/solution/te-bie-hao-yong-de-er-fen-cha-fa-fa-mo-ban-python-/
 
 

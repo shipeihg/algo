@@ -8,7 +8,7 @@ https://leetcode-cn.com/problems/permutations/solution/hui-su-suan-fa-by-powcai-
 
 """
 回溯算法套路
-回溯算法一般是用来返回排列组合的结果的，这一点切记！
+回溯算法一般是用来返回【排列组合的结果的】，这一点切记！
 
 
 一句话总结：在当前状态下，遍历所有接下来的分支！！！！
