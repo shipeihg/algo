@@ -13,6 +13,8 @@ https://leetcode-cn.com/problems/permutations/solution/hui-su-suan-fa-by-powcai-
 
 一句话总结：在当前状态下，遍历所有接下来的分支！！！！
 
+提示：可以吧回溯过程看成是多个root下多叉树的展开
+
 1.永远记住俩个要素：【路径 + 选择】(理解为：当前的路径+剩余的选择)
 2.若数组里有重复项，记得先排序
 3.若结果中要求不能含有重复项，记得递归中用 if path not in res 来排除，虽然线性复杂度，但是好理解

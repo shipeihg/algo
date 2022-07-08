@@ -165,6 +165,15 @@ class Solution(object):
             ans = max(ans, curmax)
         return ans
 
+# 343. 整数拆分
+class Solution:
+    def integerBreak(self, n: int) -> int:
+        dp = [0] * (n+1)
+        dp[1] = dp[2] = 1
+        for i in range(3, n+1):
+            dp[i] = max(max(dp[i-j], i-j) * j for j in range(i)) # 这里的max(dp[i-j], i-j)容易忽略
+        return dp[n]
+
 
 # 牛客 子数组累加最大和  
 class Solution:
