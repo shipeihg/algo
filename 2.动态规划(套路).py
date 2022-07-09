@@ -229,7 +229,7 @@ class Solution(object):
         return self.count
 
 
-# 91. Decode Ways (Medium)
+# 91. Decode Ways (Medium) # 很差的解法，条件太细了
 class Solution(object):
     def numDecodings(self, s):
         
@@ -243,6 +243,21 @@ class Solution(object):
             else:
                 if s[i-1] == '1' or (s[i-1] == '2' and int(s[i]) <= 6): dp[i+1] = dp[i-1] + dp[i]
                 else: dp[i+1] = dp[i]
+        return dp[-1]
+
+# 91. 解码方法
+# 优秀解法
+# https://leetcode.cn/problems/decode-ways/solution/gong-shui-san-xie-gen-ju-shu-ju-fan-wei-ug3dd/
+class Solution:
+    def numDecodings(self, s: str) -> int:
+        s = ' ' + s
+        dp = [0] * len(s)
+        dp[0] = 1
+        for i in range(1, len(s)):
+            if 1 <= int(s[i]) <= 9:
+                dp[i] = dp[i-1]
+            if 10 <= int(s[i-1:i+1]) <= 26:
+                dp[i] += dp[i-2]
         return dp[-1]
     
     
@@ -328,8 +343,27 @@ class Solution(object):
                     dp[i] = min(dp[i], 1 + dp[i - c])
         if dp[-1] == 1 + amount: return -1
         return dp[-1]
-    
-    
+
+
+# 322. 零钱兑换 (二维遍历，很标准的流程，没有上面的技巧)
+class Solution:
+    def coinChange(self, coins: List[int], amount: int) -> int:
+        # dp[i][j] = 前i个钱币，背包容量为j，可以获得最少硬币个数
+        V = amount
+        N = len(coins)
+        dp = [[1 + amount] * (1 + V) for _ in range(1 + N)] # 初始化1+amount,相当于初始化最大值,1+amount为不可可能的最大值，便于后续取min
+        for i in range(1 + N):
+            dp[i][0] = 0
+
+        for i in range(1, 1 + N):
+            for j in range(1, 1 + V):
+                if j < coins[i - 1]:
+                    dp[i][j] = dp[i - 1][j] # 背包装不下
+                else:
+                    dp[i][j] = min(dp[i - 1][j], 1 + dp[i][j - coins[i - 1]]) # 1 + dp[i][j - coins[i - 1]] 注意这里是dp[i][...]可以重复放
+        return dp[-1][-1] if dp[-1][-1] != 1 + amount else -1
+
+
 # 377. 组合总和 Ⅳ(如果组合问题需考虑元素之间的顺序，需将target放在外循环，将nums放在内循环。)
 class Solution(object):
     def combinationSum4(self, nums, target):
