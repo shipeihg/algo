@@ -345,7 +345,7 @@ class Solution(object):
         return dp[-1]
 
 
-# 322. 零钱兑换 (二维遍历，很标准的流程，没有上面的技巧，但是容易套路化，便于理解)
+# 322. 零钱兑换 (完全背包，物品可重复使用，二维遍历，很标准的流程，没有上面的技巧，但是容易套路化，便于理解)
 class Solution:
     def coinChange(self, coins: List[int], amount: int) -> int:
         # dp[i][j] = 前i个钱币，背包容量为j，可以获得最少硬币个数
@@ -362,6 +362,24 @@ class Solution:
                 else:
                     dp[i][j] = min(dp[i - 1][j], 1 + dp[i][j - coins[i - 1]]) # 1 + dp[i][j - coins[i - 1]] 注意这里是dp[i][...]可以重复放
         return dp[-1][-1] if dp[-1][-1] != 1 + amount else -1
+
+
+# 518. 零钱兑换 II (完全背包， 物品可以重复使用，同上)
+class Solution:
+    def change(self, amount: int, coins: List[int]) -> int:
+        V = amount
+        N = len(coins)
+        dp = [[0] * (1 + V) for _ in range(1 + N)]
+
+        for i in range(1 + N):
+            dp[i][0] = 1
+        for i in range(1, 1 + N):
+            for j in range(1, 1 + V):
+                if j < coins[i - 1]:
+                    dp[i][j] = dp[i - 1][j]
+                else:
+                    dp[i][j] = dp[i - 1][j] + dp[i][j - coins[i - 1]]
+        return dp[-1][-1]
 
 
 # 377. 组合总和 Ⅳ(如果组合问题需考虑元素之间的顺序，需将target放在外循环，将nums放在内循环。)
