@@ -345,7 +345,7 @@ class Solution(object):
         return dp[-1]
 
 
-# 322. 零钱兑换 (二维遍历，很标准的流程，没有上面的技巧)
+# 322. 零钱兑换 (二维遍历，很标准的流程，没有上面的技巧，但是容易套路化，便于理解)
 class Solution:
     def coinChange(self, coins: List[int], amount: int) -> int:
         # dp[i][j] = 前i个钱币，背包容量为j，可以获得最少硬币个数
