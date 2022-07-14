@@ -33,6 +33,7 @@ class StackWithTwoQueues(object):
         return None
 
 
+# 单调栈
 # 每日温度
 class Solution(object):
     def dailyTemperatures(self, T):
@@ -51,6 +52,7 @@ class Solution(object):
             s.append((I, t))
         return ret
 
+# 单调栈
 # 下一个更大的元素
 class Solution:
     def nextGreaterElement(self, nums1, nums2):
@@ -68,6 +70,7 @@ class Solution:
         return ret            
     
 
+# # 单调栈
 # 503. 下一个更大元素 II   
 class Solution(object):
     def nextGreaterElements(self, nums):
@@ -83,5 +86,38 @@ class Solution(object):
                 s.pop()
             ret.insert(0, s[-1] if s else -1)
         return ret
-            
+
+
+# 自定义单调队列
+# 239. 滑动窗口最大值
+# https://leetcode.cn/problems/sliding-window-maximum/solution/dan-diao-dui-lie-by-labuladong/
+class Window:
+    def __init__(self):
+        self.q = collections.deque()
+
+    def push(self, n):
+        while self.q and self.q[0] < n:
+            self.q.popleft()
+        self.q.appendleft(n)
+
+    def pop(self, n):
+        if self.q and self.q[-1] == n:
+            self.q.pop()
+
+    def max(self):
+        return self.q[-1]
+
+
+class Solution:
+    def maxSlidingWindow(self, A: List[int], k: int) -> List[int]:
+        res = []
+        window = Window()
+        for i in range(len(A)):
+            if i < k-1:
+                window.push(A[i])
+            else:
+                window.push(A[i])
+                res.append(window.max())
+                window.pop(A[i-k+1])
+        return res
     

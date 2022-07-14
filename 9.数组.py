@@ -1,12 +1,19 @@
 
 
+
+"""nSum问题
+https://mp.weixin.qq.com/s/fSyJVvggxHq28a0SdmZm6Q
+"""
+
+
+
 # 查找数组中大于一半数量的元素
 class Solution:
     def majorityElement(self, numbers):
         # write code here
         votes = 0
         for num in numbers:
-            if votes == 0: x = num
+            if votes == 0: x = num # 大于一半的数字，总有机会满足votes==0
             if num == x: votes += 1
             else: votes -= 1
         return x
@@ -77,6 +84,7 @@ class Solution(object):
             left += 1
         return mat
 
+
 # 54. 螺旋矩阵
 #https://leetcode-cn.com/problems/spiral-matrix/solution/shou-hui-tu-jie-liang-chong-bian-li-de-ce-lue-kan-/
 class Solution(object):
@@ -114,7 +122,4 @@ class Solution(object):
         """
         m, n = len(matrix), len(matrix[0])
         return all(matrix[i][j]==matrix[i-1][j-1] for i in range(1,m) for j in range(1,n))
-  
-                
-        
-        
+
