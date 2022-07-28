@@ -192,16 +192,19 @@ class Solution(object):
 
 class Solution(object):
     def deleteDuplicates(self, head):
+
         """
-        :type head: ListNode
-        :rtype: ListNode
-        """  
+        解释的很好，吧精髓讲出来了
+        https://blog.csdn.net/weixin_44492824/article/details/123718303
+        """
+
         if not head or not head.next: return head
-        # 第二步才轮到考虑子问题
+        # head指针指向包括head.next为开头删除重复元素后干净的链表，这个时候，【head.next后面的都没有重复的元素】
         head.next = self.deleteDuplicates(head.next)
-        # 第一步应该先考虑 return 的结果，这里要分情况讨论
-        if head.val == head.next.val: return head.next
-        else: return head
+        # 因为head.next之后都没有重复的元素了，只需判断head和head.next是否相等
+        if head.val == head.next.val:
+            return head.next
+        return head
 
 
 # 82 删除排序链表中的重复元素 II

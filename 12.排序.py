@@ -32,3 +32,17 @@ def mergeLists(lists):
     left = mergeLists(lists[:mid])
     right = mergeLists(lists[mid:])
     return mergeTwoArray(left, right)
+
+
+# 435. 无重叠区间
+class Solution:
+    def eraseOverlapIntervals(self, A: List[List[int]]) -> int:
+        count = 0
+        A.sort(key=lambda x: x[1]) # 按照结束时间排序，若按开始时间，需要倒遍历
+        pre = A[0]
+        for x in A[1:]:
+            if x[0] < pre[1]: # 若果交叉，count++,代表需要删除数量
+                count += 1
+            else:
+                pre = x
+        return count

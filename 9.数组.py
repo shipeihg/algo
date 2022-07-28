@@ -123,3 +123,59 @@ class Solution(object):
         m, n = len(matrix), len(matrix[0])
         return all(matrix[i][j]==matrix[i-1][j-1] for i in range(1,m) for j in range(1,n))
 
+
+# 差分数组问题
+# https://labuladong.github.io/algo/2/19/24/
+
+class Difference(object):
+    def __init__(self, nums):
+        self.diff = [0] * len(nums)
+        self.diff[0] = nums[0]
+        for i in range(1, len(nums)):
+            self.diff[i] = nums[i] - nums[i - 1]
+
+    def increase(self, i, j, val):
+        self.diff[i] += val
+        if j + 1 < len(self.diff):
+            self.diff[j + 1] -= val
+
+    def result(self):
+        res = [0] * len(self.diff)
+        res[0] = self.diff[0]
+        for i in range(1, len(res)):
+            res[i] = res[i - 1] + self.diff[i]
+        return res
+
+
+# 1109. 航班预订统计
+class Solution:
+    def corpFlightBookings(self, bookings: List[List[int]], n: int) -> List[int]:
+        nums = [0] * n
+        diff_obj = Difference(nums)
+        for book in bookings:
+            i, j, val = book
+            diff_obj.increase(i - 1, j - 1, val)
+        return diff_obj.result()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
